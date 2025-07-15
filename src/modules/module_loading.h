@@ -15,6 +15,6 @@ typedef struct {
 	void* so; /* shared object */
 } module_t;
 
-module_t* load_module(const char* module);
-
-void free_module(module_t*);
+module_t* module_load(const char* module);
+void* module_get(module_t* module, const char* function);
+void module_free(module_t*);

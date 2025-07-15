@@ -9,7 +9,7 @@
 /* todo */
 #endif
 
-module_t* load_module(const char* m) {
+module_t* module_load(const char* m) {
 	module_t* module = malloc(sizeof(module_t));
 
 #if defined(__unix__)
@@ -46,7 +46,19 @@ load_module_failed:
 	return NULL;
 }
 
-void free_module(module_t* module) {
+void* module_get(module_t* module, const char* function) {
+#ifdef __unix__
+	void* func = dlsym(module->so, function);
+	char* result = dlerror();
+	if (result) {
+      return NULL;
+	} else {
+      return func;
+   }
+#endif
+}
+
+void module_free(module_t* module) {
 	module->close_module();
 	free(module);
 }
