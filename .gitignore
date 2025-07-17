@@ -1,0 +1,15 @@
+# platform dependent
+modules/modules.c
+obj/
+bin/
+
+
+# gcc/make
+Makefile
+*.make
+
+# clangd
+compile_commands.json
+.cache/
+
+# msvc (todo)

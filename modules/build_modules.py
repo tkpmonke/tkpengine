@@ -17,9 +17,17 @@ def generate_c_file():
     modules = list_directories()
 
     fd = open("modules/modules.c", "w")
+    fd.write("/* auto generated initilzation for modules */\n\n")
 
     for m in modules:
         fd.write("#include \"" + m + "/register_module.h\"\n")
+
+    fd.write("\nvoid modules_register() {\n")
+
+    for m in modules:
+        fd.write("\tregister_module_" + m + "();\n")
+
+    fd.write("}")
 
     fd.close()
 
