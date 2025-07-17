@@ -21,7 +21,7 @@ typedef i64 ilength;
 typedef float f32;
 typedef double f64;
 
-/* 
+/*
  * f128 is supported on some compilers but
  * due to the compilers that don't support it (msvc)
  * and it not really being nessesarry, its not

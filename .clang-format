@@ -1,0 +1,10 @@
+Language: Cpp
+BasedOnStyle: LLVM
+
+# tabs > spaces
+UseTab: Always
+IndentWidth: 4
+TabWidth: 4
+
+# only correct allignment
+PointerAlignment: Left
