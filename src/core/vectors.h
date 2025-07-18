@@ -1,0 +1,52 @@
+#pragma once
+
+typedef float vec2[2];
+typedef float vec3[3];
+typedef float vec4[4];
+
+/* vec2 functions */
+void  vec2_copy(vec2 a, vec2 dest);
+void  vec2_zero(vec2 v);
+void  vec2_one(vec2 v);
+float vec2_dot(vec2 a, vec2 b);
+float vec2_cross(vec2 a, vec2 b);
+float vec2_norm2(vec2 v);
+float vec2_norm(vec2 vec);
+void  vec2_add(vec2 a, vec2 b, vec2 dest);
+void  vec2_adds(vec2 v, float s, vec2 dest);
+void  vec2_sub(vec2 a, vec2 b, vec2 dest);
+void  vec2_subs(vec2 v, float s, vec2 dest);
+void  vec2_mul(vec2 a, vec2 b, vec2 d);
+void  vec2_scale(vec2 v, float s, vec2 dest);
+void  vec2_scale_as(vec2 v, float s, vec2 dest);
+void  vec2_div(vec2 a, vec2 b, vec2 dest);
+void  vec2_divs(vec2 v, float s, vec2 dest);
+void  vec2_addadd(vec2 a, vec2 b, vec2 dest);
+void  vec2_subadd(vec2 a, vec2 b, vec2 dest);
+void  vec2_muladd(vec2 a, vec2 b, vec2 dest);
+void  vec2_muladds(vec2 a, float s, vec2 dest);
+void  vec2_maxadd(vec2 a, vec2 b, vec2 dest);
+void  vec2_minadd(vec2 a, vec2 b, vec2 dest);
+void  vec2_subsub(vec2 a, vec2 b, vec2 dest);
+void  vec2_addsub(vec2 a, vec2 b, vec2 dest);
+void  vec2_mulsub(vec2 a, vec2 b, vec2 dest);
+void  vec2_mulsubs(vec2 a, float s, vec2 dest);
+void  vec2_maxsub(vec2 a, vec2 b, vec2 dest);
+void  vec2_minsub(vec2 a, vec2 b, vec2 dest);
+void  vec2_negate_to(vec2 v, vec2 dest);
+void  vec2_negate(vec2 v);
+void  vec2_normalize(vec2 v);
+void  vec2_normalize_to(vec2 vec, vec2 dest);
+void  vec2_rotate(vec2 v, float angle, vec2 dest);
+void  vec2_center(vec2 a, vec2 b, vec2 dest);
+float vec2_distance2(vec2 a, vec2 b);
+float vec2_distance(vec2 a, vec2 b);
+void  vec2_maxv(vec2 v1, vec2 v2, vec2 dest);
+void  vec2_minv(vec2 v1, vec2 v2, vec2 dest);
+void  vec2_clamp(vec2 v, float minVal, float maxVal);
+void  vec2_swizzle(vec2 v, int mask, vec2 dest);
+void  vec2_lerp(vec2 from, vec2 to, float t, vec2 dest);
+void  vec2_step(vec2 edge, vec2 x, vec2 dest);
+void  vec2_make(float* src, vec2 dest);
+void  vec2_reflect(vec2 v, vec2 n, vec2 dest);
+void  vec2_refract(vec2 v, vec2 n, float eta, vec2 dest);
