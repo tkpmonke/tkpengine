@@ -29,4 +29,3 @@ typedef double f64;
  */
 
 typedef char* string;
-
