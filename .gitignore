@@ -1,5 +1,4 @@
 # platform dependent
-modules/modules.c
 obj/
 bin/
 

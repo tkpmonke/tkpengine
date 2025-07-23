@@ -21,13 +21,13 @@ def generate_c_file():
     fd.write("/* auto generated initilzation for modules */\n\n")
 
     for m in modules:
-        if os.path.isfile(m + "/register_module.h"):
+        if os.path.isfile("modules/" + m + "/register_module.h"):
             fd.write("#include \"" + m + "/register_module.h\"\n")
 
     fd.write("\nvoid modules_register() {\n")
 
     for m in modules:
-        if os.path.isfile(m + "/register_module.h"):
+        if os.path.isfile("modules/" + m + "/register_module.h"):
             fd.write("\tregister_module_" + m + "();\n")
 
     fd.write("}")
