@@ -44,6 +44,7 @@ project "test-editor"
 	files { "editor/**.c", "editor/**.h" }
 
 	warnings "Extra"
+	--sanitize { "Address", "UndefinedBehavior" }
 
 	links { "test-engine" }
 

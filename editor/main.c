@@ -1,11 +1,16 @@
 #include "core/component_registry.h"
 #include "modules.h"
 
+#include "camera/camera.h"
+
 #include <stdio.h>
 
 int main() {
 	modules_register();
 	component_registry_t* registry = component_registry_get();
+
+	component_camera_t* camera = (component_camera_t*)component_registry_get_component("camera")->create();
+	camera->base.start((component_t*)camera);
 
 	for (u8 i = 0; i < registry->count; ++i) {
 		printf("Component > %s\n", registry->components[i].name);
@@ -20,4 +25,7 @@ int main() {
 			j++;
 		}
 	}
+
+	component_registry_free();
+	free(camera);
 }

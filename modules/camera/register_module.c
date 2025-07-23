@@ -3,7 +3,12 @@
 #include "core/component_registry.h"
 
 component_t* create_camera_component() {
-	return malloc(sizeof(component_camera_t));
+	component_t* c = malloc(sizeof(component_camera_t));
+	c->start = component_camera_start;
+	c->update = component_camera_update;
+	c->shutdown = component_camera_shutdown;
+	c->type = component_registry_get_component("camera")->id;
+	return c;
 }
 
 component_variable_t variables[] = {
@@ -37,7 +42,7 @@ component_variable_t variables[] = {
 		.type = component_variable_type_enum,
 		.flags = 0,
 		.enum_values =
-		(const char* const[3]){ "perspective", "orthographic", NULL }
+		(const string[3]){ "perspective", "orthographic", NULL }
 	},
 	COMPONENT_VARIABLE_NULL_INITILIZER
 };

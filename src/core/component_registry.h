@@ -9,7 +9,7 @@
 	}
 
 typedef struct {
-	const char* name;
+	const string name;
 	u32 offset;
 
 	/*
@@ -44,6 +44,9 @@ typedef struct {
 		component_variable_type_matrix4x2,
 		component_variable_type_matrix4x3,
 		component_variable_type_enum,
+		
+		/* unused for now */
+		component_variable_type_function
 	} type;
 
 	/*
@@ -56,13 +59,14 @@ typedef struct {
 	} flags;
 
 	/* only used when type == component_variable_type_enum */
-	const char* const* enum_values;
+	const string* enum_values;
 } component_variable_t;
 
 typedef struct {
-	const char* name;
+	string name;
 	component_t* (*create)();
 	component_variable_t* variables;
+	length id;
 } component_definition_t;
 
 typedef struct {
@@ -72,7 +76,7 @@ typedef struct {
 } component_registry_t;
 
 component_registry_t* component_registry_get();
-component_definition_t* component_registry_get_component(char* name);
+component_definition_t* component_registry_get_component(string name);
 
 void component_registry_free();
 
