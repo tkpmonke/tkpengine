@@ -14,6 +14,14 @@ typedef int64_t i64;
 
 typedef u8 boolean;
 
+#if !defined(TRUE)
+#define TRUE 1
+#endif
+
+#if !defined(FALSE)
+#define FALSE 0
+#endif
+
 typedef u64 length;
 typedef i64 ilength;
 

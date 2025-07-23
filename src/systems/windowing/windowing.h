@@ -2,6 +2,10 @@
 
 #include "core/types.h"
 
+#ifndef WINDOWING_BACKEND
+#define WINDOWING_BACKEND RGFW
+#endif
+
 typedef struct {
 	u32 width, height, x, y;
 
