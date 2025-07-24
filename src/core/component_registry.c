@@ -12,7 +12,14 @@ static component_registry_t registry = {
 component_registry_t* component_registry_get() { return &registry; }
 
 component_definition_t* component_registry_get_component(char* name) {
-	/* basic binary string search implementation */
+	/* basic binary string search implementation
+	 * THIS IS BROKEN AND NEEDS WORK 
+	 *
+	 * Future me:
+	 * write better code
+	 *
+	 * you forgot to sort the components by name dumbass
+	 */
 
 	int start = 0, end = registry.count;
 	while (start <= end) {
