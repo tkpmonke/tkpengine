@@ -19,7 +19,6 @@ component_definition_t* component_registry_get_component(char* name) {
 	 * write better code
 	 *
 	 * you forgot to sort the components by name dumbass
-	 */
 
 	int start = 0, end = registry.count;
 	while (start <= end) {
@@ -35,14 +34,14 @@ component_definition_t* component_registry_get_component(char* name) {
 			end = mid - 1;
 		}
 	}
+	*/
 
-	/* old version
+	/* slower version but it actually works properly */
 	for (length i = 0; i < registry.count; ++i) {
 		if (strcmp(registry.components[i].name, name) == 0) {
 			return &registry.components[i];
 		}
 	}
-	*/
 
 	return NULL;
 }
