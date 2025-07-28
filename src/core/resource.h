@@ -4,5 +4,5 @@
 
 typedef struct {
 	string path;
-	
+	void* data;
 } resource_t;

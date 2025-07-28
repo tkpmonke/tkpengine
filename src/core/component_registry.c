@@ -46,12 +46,15 @@ component_definition_t* component_registry_get_component(char* name) {
 	return NULL;
 }
 
+
+static const u8 component_registry_default_size_c = 4;
+static const float component_registry_step_c = 2.f;
 void component_registry_add(component_definition_t* def) {
 	if (registry.count + 1 > registry.capacity) {
-		registry.capacity *= 2;
+		registry.capacity *= component_registry_step_c;
 		if (registry.capacity == 0) {
-			registry.capacity = 4;
-			registry.components = malloc(4 * sizeof(component_definition_t));
+			registry.capacity = component_registry_default_size_c;
+			registry.components = malloc(component_registry_default_size_c * sizeof(component_definition_t));
 		} else {
 			registry.components =
 				realloc(registry.components,
