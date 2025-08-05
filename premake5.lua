@@ -21,11 +21,11 @@ project "test-engine"
 
 	warnings "Extra"
 
-	filter "system:linux" 
-		links { "X11", "Xrandr", "GL", "GLX", "m" }
+	-- filter "system:linux" 
+	-- 	links { "X11", "Xrandr", "GL", "GLX", "m" }
 
-	filter "system:windows"
-		links { "gdi32", "user32", "shell32", "opengl32", "glu32", "m" }
+	-- filter "system:windows"
+	-- 	links { "gdi32", "user32", "shell32", "opengl32", "glu32", "m" }
 
 	filter "configurations:Debug"
 		defines { "DEBUG" }

@@ -26,6 +26,8 @@ int main() {
 		}
 	}
 
+	getchar();
+
 	component_registry_free();
 	free(camera);
 }
