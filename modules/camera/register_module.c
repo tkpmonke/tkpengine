@@ -43,6 +43,13 @@ component_variable_t variables[] = {
 		.flags = 0,
 		.enum_values =
 		(const string[3]){ "perspective", "orthographic", NULL }
+	}, {
+		.name = "Clear Mode",
+		.offset = offsetof(component_camera_t, clear_mode),
+		.type = component_variable_type_enum,
+		.flags = 0,
+		.enum_values =
+		(const string[4]){ "skybox", "clear_color", "nothing", NULL }
 	},
 	COMPONENT_VARIABLE_NULL_INITILIZER
 };

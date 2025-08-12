@@ -12,13 +12,25 @@ typedef struct {
 	} matrices;
 
 	struct component_camera_clip_plane {
-		float near, far;
+		float near;
+		float far;
 	} clip_plane;
 
 	enum component_camera_projection_mode {
 		perspective,
-		orthographic,
+		orthographic
 	} projection_mode;
+
+	/* 
+	 * nothing is last instead of 0
+	 * since we don't really want that to be
+	 * default
+	 */
+	enum component_camera_clear_mode {
+		skybox,
+		clear_color,
+		nothing
+	} clear_mode;
 } component_camera_t;
 
 void component_camera_start(component_t* self);
