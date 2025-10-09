@@ -1,4 +1,5 @@
 #include "component_registry.h"
+#include "memory/memory.h"
 
 #include <string.h>
 #include <stdlib.h>
@@ -12,7 +13,8 @@ static component_registry_t registry = {
 component_registry_t* component_registry_get() { return &registry; }
 
 component_definition_t* component_registry_get_component(char* name) {
-	/* basic binary string search implementation
+	/* 
+	 * basic binary string search implementation
 	 * THIS IS BROKEN AND NEEDS WORK 
 	 *
 	 * Future me:
@@ -52,13 +54,11 @@ static const float component_registry_step_c = 2.f;
 void component_registry_add(component_definition_t* def) {
 	if (registry.count + 1 > registry.capacity) {
 		registry.capacity *= component_registry_step_c;
-		if (registry.capacity == 0) {
+		if (registry.capacity == 0 || registry.components == NULL) {
 			registry.capacity = component_registry_default_size_c;
-			registry.components = malloc(component_registry_default_size_c * sizeof(component_definition_t));
+			registry.components = TKP_MALLOC(component_registry_default_size_c * sizeof(component_definition_t));
 		} else {
-			registry.components =
-				realloc(registry.components,
-						registry.capacity * sizeof(component_definition_t));
+			registry.components = TKP_REALLOC(registry.components, registry.capacity * sizeof(component_definition_t));
 		}
 	}
 	registry.components[registry.count] = *def;
@@ -66,7 +66,7 @@ void component_registry_add(component_definition_t* def) {
 }
 
 void component_registry_free() {
-	free(registry.components);
+	TKP_FREE(registry.components);
 	registry.count = 0;
 	registry.capacity = 0;
 }
