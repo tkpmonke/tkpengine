@@ -1,11 +1,16 @@
 #include "core/component_registry.h"
-#include "modules.h"
+#include "core/utilites/os.h"
 
+#include "modules.h"
 #include "camera/camera.h"
 
 #include <stdio.h>
 
 int main() {
+	os_write("Initilizing Modules And Testing os_write!\n", 42, stdout->_fileno);
+	printf("Home Path > %s\n", os_get_home());
+	printf("Log Path > %s\n\n", os_get_log_path());
+
 	modules_register();
 	component_registry_t* registry = component_registry_get();
 

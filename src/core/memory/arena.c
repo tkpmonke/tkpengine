@@ -4,7 +4,7 @@
 arena_allocator_t* arena_allocator_initilize(u32 start_capacity) {
 	arena_allocator_t* arena = TKP_MALLOC(sizeof(arena_allocator_t));
 	arena->arena = TKP_MALLOC(start_capacity);
-	arena->capactity = start_capacity;
+	arena->capacity = start_capacity;
 	arena->used = 0;
 
 	return arena;
@@ -12,7 +12,7 @@ arena_allocator_t* arena_allocator_initilize(u32 start_capacity) {
 
 void* arena_allocator_allocate(arena_allocator_t* arena, u32 bytes) {
 #ifdef DEBUG
-	if (arena->used+byte > arena->capactity) {
+	if (arena->used+bytes > arena->capacity) {
 		
 	}
 #endif
