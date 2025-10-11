@@ -1,9 +1,10 @@
 #include "register_module.h"
 #include "camera.h"
 #include "core/component_registry.h"
+#include "core/memory/memory.h"
 
 component_t* create_camera_component() {
-	component_t* c = malloc(sizeof(component_camera_t));
+	component_t* c = TKP_MALLOC(sizeof(component_camera_t));
 	c->start = component_camera_start;
 	c->update = component_camera_update;
 	c->shutdown = component_camera_shutdown;
@@ -11,40 +12,40 @@ component_t* create_camera_component() {
 	return c;
 }
 
-component_variable_t variables[] = {
+static component_variable_t variables[] = {
 	{
-		.name = "Projection Matrix",
+		.name = "projection_matrix",
 		.offset = offsetof(component_camera_t, matrices.projection),
 		.type = component_variable_type_matrix4,
 		.flags = component_variable_flags_hidden,
 		.enum_values = NULL
 	}, {
-		.name = "View Matrix",
+		.name = "view_matrix",
 		.offset = offsetof(component_camera_t, matrices.view),
 		.type = component_variable_type_matrix4,
 		.flags = component_variable_flags_hidden,
 		.enum_values = NULL
 	}, {
-		.name = "Near Plane",
+		.name = "near_plane",
 		.offset = offsetof(component_camera_t, clip_plane.near),
 		.type = component_variable_type_f32,
 		.flags = 0,
 		.enum_values = NULL
 	}, {
-		.name = "Far Plane",
+		.name = "far_plane",
 		.offset = offsetof(component_camera_t, clip_plane.far),
 		.type = component_variable_type_f32,
 		.flags = 0,
 		.enum_values = NULL
 	}, {
-		.name = "Projection Mode",
+		.name = "projection_mode",
 		.offset = offsetof(component_camera_t, projection_mode),
 		.type = component_variable_type_enum,
 		.flags = 0,
 		.enum_values =
 		(const string[3]){ "perspective", "orthographic", NULL }
 	}, {
-		.name = "Clear Mode",
+		.name = "clear_mode",
 		.offset = offsetof(component_camera_t, clear_mode),
 		.type = component_variable_type_enum,
 		.flags = 0,

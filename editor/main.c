@@ -5,6 +5,7 @@
 
 #include "modules.h"
 #include "camera/camera.h"
+#include "collider/collider.h"
 
 #include <stdio.h>
 
@@ -16,14 +17,21 @@ int main() {
 	console_write("This is a standard print!\n");
 	console_write_warning("Here is a warning!\n");
 	console_write_error("Here is an error!\n\n");
+	
+	console_write_va("Does write va work? %s\n", "yeah it does!!");
+	console_write_warning_va("What about warning va? %s\n", "it does too!!");
+	console_write_error_va("ok ok, theres no way error va works too... %s\n\n", "it also works!!");
+
 	printf("Home Path > %s\n", os_get_home());
 	printf("Log Path > %s\n\n", os_get_log_path());
 
 	modules_register();
 	component_registry_t* registry = component_registry_get();
-
 	component_camera_t* camera = (component_camera_t*)component_registry_get_component("camera")->create();
 	camera->base.start((component_t*)camera);
+
+	component_collider_t* collider = (component_collider_t*)component_registry_get_component("collider")->create();
+	collider->base.start((component_t*)collider);
 
 	for (u8 i = 0; i < registry->count; ++i) {
 		printf("Component > %s\n", registry->components[i].name);
@@ -38,8 +46,6 @@ int main() {
 			j++;
 		}
 	}
-
-	getchar();
 
 	TKP_FREE(camera);
 	

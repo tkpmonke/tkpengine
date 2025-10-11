@@ -8,8 +8,9 @@ project "test-engine"
 
 	-- ensure up to date modules when building
 	prebuildcommands {
-		"@{ECHO} Building Module Registry",
-		"python modules/build_modules.py"
+		"@{ECHO}\nBuilding Module Registry",
+		"python modules/build_modules.py",
+		"@{ECHO}\n",
 	}
 
 	kind "SharedLib"

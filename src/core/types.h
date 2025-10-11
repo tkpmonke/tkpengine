@@ -12,6 +12,7 @@ typedef int16_t i16;
 typedef int32_t i32;
 typedef int64_t i64;
 
+typedef u8 uchar;
 typedef u8 boolean;
 
 #if !defined(TRUE)
@@ -36,3 +37,4 @@ typedef double f64;
  */
 
 typedef char* string;
+typedef u64 hashed_string;

@@ -71,6 +71,17 @@ void console_write_error(char* error) {
 	}
 }
 
+/* this is where it's gonna get fun :despairge: */
+void console_write_va(string message, ...) {
+	va_list list;
+	va_start(list, message);
+
+	va_end(list);
+}
+
+void console_write_warning_va(string warning, ...) {}
+void console_write_error_va(string error, ...) {}
+
 void console_free(void) {
 	fclose(log_file);
 }

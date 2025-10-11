@@ -10,14 +10,9 @@
 
 typedef struct {
 	const string name;
+	hashed_string hash;
 	u32 offset;
 
-	/*
-	 * look at the following for more info
-	 * src/core/types.h
-	 * utils/math/vectors.h
-	 * utils/math/matrices.h
-	 */
 	enum component_variable_type {
 		component_variable_type_u8,
 		component_variable_type_u16,
@@ -64,6 +59,7 @@ typedef struct {
 
 typedef struct {
 	string name;
+	hashed_string hash;
 	component_t* (*create)();
 	component_variable_t* variables;
 	length id;
