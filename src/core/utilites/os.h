@@ -8,3 +8,7 @@ string os_get_home();
 string os_get_log_path();
 
 void os_write(string data, length length, u32 fd);
+
+/* returns FALSE on error */
+boolean os_mkdir(string directory);
+void os_recursive_mkdir(string path);

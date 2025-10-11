@@ -2,7 +2,7 @@
 
 #include "core/types.h"
 
-#ifndef WINDOWING_BACKEND
+#if !defined(WINDOWING_BACKEND)
 #define WINDOWING_BACKEND RGFW
 #endif
 

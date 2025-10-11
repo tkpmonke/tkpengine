@@ -1,5 +1,7 @@
 #include "core/component_registry.h"
 #include "core/utilites/os.h"
+#include "core/utilites/console.h"
+#include "core/memory/memory.h"
 
 #include "modules.h"
 #include "camera/camera.h"
@@ -7,7 +9,13 @@
 #include <stdio.h>
 
 int main() {
-	os_write("Initilizing Modules And Testing os_write!\n", 42, stdout->_fileno);
+	console_init();
+	console_init_log_file(NULL);
+
+	console_write("Initilizing Modules And Testing Console!\n\n");
+	console_write("This is a standard print!\n");
+	console_write_warning("Here is a warning!\n");
+	console_write_error("Here is an error!\n\n");
 	printf("Home Path > %s\n", os_get_home());
 	printf("Log Path > %s\n\n", os_get_log_path());
 
@@ -33,6 +41,8 @@ int main() {
 
 	getchar();
 
+	TKP_FREE(camera);
+	
 	component_registry_free();
-	free(camera);
+	console_free();
 }
