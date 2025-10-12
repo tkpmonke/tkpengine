@@ -39,10 +39,10 @@ int main() {
 		component_variable_t* variable;
 		u8 j = 0;
 		while ((variable = &registry->components[i].variables[j])->name != NULL) {
-			printf("\tVariable > %s\n", variable->name);
-			printf("\t\tOffset > %d\n", variable->offset);
-			printf("\t\tType > %d\n", variable->type);
-			printf("\t\tFlags > %d\n", variable->flags);
+			console_write_va("\tVariable > %s\n", variable->name);
+			console_write_va("\t\tOffset > %d\n", variable->offset);
+			console_write_va("\t\tType > %d\n", variable->type);
+			console_write_va("\t\tFlags > %d\n", variable->flags);
 			j++;
 		}
 	}

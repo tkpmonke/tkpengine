@@ -16,9 +16,11 @@ void console_init_log_file(string path);
 void console_set_console_file(FILE* console);
 
 void console_write(string message);
+void console_write_len(string message, length len);
 void console_write_warning(string warning);
 void console_write_error(string error);
 
+void console_va(string message, va_list list);
 void console_write_va(string message, ...);
 void console_write_warning_va(string warning, ...);
 void console_write_error_va(string error, ...);

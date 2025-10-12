@@ -2,6 +2,7 @@
 #include "os.h"
 #include "../types.h"
 #include "../memory/memory.h"
+#include "string.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -51,6 +52,14 @@ void console_write(char* message) {
 	}
 }
 
+void console_write_len(char* message, length len) {
+	if (console != NULL) {
+		os_write(message, len, console->_fileno);
+	} if (log_file != NULL) {
+		os_write(message, len, log_file->_fileno);
+	}
+}
+
 void console_write_warning(char* warning) {
 	if (console != NULL) {
 		os_write("\x1b[1;4;33mWarning:\x1b[0m ", 22, console->_fileno);
@@ -62,25 +71,67 @@ void console_write_warning(char* warning) {
 }
 
 void console_write_error(char* error) {
+	length len = strlen(error);
 	if (console != NULL) {
 		os_write("\x1b[1;4;31mError:\x1b[0m ", 20, console->_fileno);
-		os_write(error, strlen(error), console->_fileno);
+		if (len > 0) {
+			os_write(error, len, console->_fileno);
+		}
 	} if (log_file != NULL) {
 		os_write("Error: ", 7, log_file->_fileno);
-		os_write(error, strlen(error), log_file->_fileno);
+		if (len > 0) {
+			os_write(error, len, log_file->_fileno);
+		}
 	}
 }
 
 /* this is where it's gonna get fun :despairge: */
+void console_va(string message, va_list list) {
+	char buffer[128];
+	length len = strlen(message);
+	char last_character = '\0';
+	for (length i = 0; i < len; ++i) {
+		if (last_character == '%') {
+			switch (message[i]) {
+				case ('%'): {
+					console_write_len("%", 1);
+					break;
+				} case ('s'): {
+					console_write(va_arg(list, string));
+					break;
+				} case ('d'): {
+					i32_to_str(va_arg(list, i32), buffer);
+					console_write(buffer);
+				}
+			}
+		} else if (message[i] != '%') {
+			console_write_len(&message[i], 1);
+		}
+		last_character = message[i];
+	}
+}
+
 void console_write_va(string message, ...) {
 	va_list list;
 	va_start(list, message);
-
+	console_va(message, list);
 	va_end(list);
 }
 
-void console_write_warning_va(string warning, ...) {}
-void console_write_error_va(string error, ...) {}
+void console_write_warning_va(string warning, ...) {
+	va_list list;
+	va_start(list, warning);
+	console_write_warning("");
+	console_va(warning, list);
+	va_end(list);
+}
+void console_write_error_va(string error, ...) {
+	va_list list;
+	va_start(list, error);
+	console_write_error("");
+	console_va(error, list);
+	va_end(list);
+}
 
 void console_free(void) {
 	fclose(log_file);
