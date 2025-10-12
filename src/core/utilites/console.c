@@ -99,9 +99,14 @@ void console_va(string message, va_list list) {
 				} case ('s'): {
 					console_write(va_arg(list, string));
 					break;
-				} case ('d'): {
+				} case ('d'): case ('i'): {
 					i32_to_str(va_arg(list, i32), buffer);
 					console_write(buffer);
+					break;
+				} case ('f'): {
+					f32_to_str(va_arg(list, f64), buffer);
+					console_write(buffer);
+					break;
 				}
 			}
 		} else if (message[i] != '%') {
