@@ -62,10 +62,10 @@ void f32_to_str(f32 in, string out) {
 	
 	out[i] = '.';
 	
-	/* pow(10, 5) is 100,000 */
-	pre_dec *= 100000;
+	/* pow(10, 4) is 10,000 */
+	pre_dec *= 10000;
 	if (pre_dec < 0) {
 		pre_dec = -pre_dec;
 	}
-	i32_to_str((int)pre_dec, out+i+1);
+	i32_to_str((i32)pre_dec, out+i+1);
 }

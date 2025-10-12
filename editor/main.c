@@ -19,8 +19,8 @@ int main() {
 	console_write_error("Here is an error!\n\n");
 	
 	console_write_va("Does write va work? %s %s\n", "yeah it does!!", "nuh uh");
-	console_write_va("Perhaps floats work? %f, %f, %f\n", 15.0f, -74.53f, 213.546f);
-	console_write_va("Ints? %d, %d, %d\n", 64, 12, -532);
+	console_write_va("Perhaps floats work? %f, %f, %f\n", 15.0f, -74.52f, 213.546f);
+	console_write_va("Ints? %d, %d, %d\n", 64, 12-16, -532);
 	console_write_warning_va("What about warning va? %s\n", "it does too!!");
 	console_write_error_va("ok ok, theres no way error va works too... %s\n\n", "it also works!!");
 
@@ -36,7 +36,7 @@ int main() {
 	collider->base.start((component_t*)collider);
 
 	for (u8 i = 0; i < registry->count; ++i) {
-		printf("Component > %s\n", registry->components[i].name);
+		console_write_va("Component > %s\n", registry->components[i].name);
 
 		component_variable_t* variable;
 		u8 j = 0;
