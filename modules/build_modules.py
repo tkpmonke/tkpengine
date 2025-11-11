@@ -4,6 +4,7 @@
 import os
 import os.path
 
+
 def list_directories():
     paths = []
 
@@ -13,6 +14,7 @@ def list_directories():
         if path.is_dir():
             paths.append(path.name)
     return paths
+
 
 def generate_c_file():
     modules = list_directories()
@@ -33,5 +35,6 @@ def generate_c_file():
     fd.write("}")
 
     fd.close()
+
 
 generate_c_file()

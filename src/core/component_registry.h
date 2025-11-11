@@ -13,37 +13,6 @@ typedef struct {
 	hashed_string hash;
 	u32 offset;
 
-	enum component_variable_type {
-		component_variable_type_u8,
-		component_variable_type_u16,
-		component_variable_type_u32,
-		component_variable_type_u64,
-		component_variable_type_i8,
-		component_variable_type_i16,
-		component_variable_type_i32,
-		component_variable_type_i64,
-		component_variable_type_f32,
-		component_variable_type_f64,
-		component_variable_type_boolean,
-		component_variable_type_string,
-		component_variable_type_vector2,
-		component_variable_type_vector3,
-		component_variable_type_vector4,
-		component_variable_type_matrix2,
-		component_variable_type_matrix2x3,
-		component_variable_type_matrix2x4,
-		component_variable_type_matrix3,
-		component_variable_type_matrix3x2,
-		component_variable_type_matrix3x4,
-		component_variable_type_matrix4,
-		component_variable_type_matrix4x2,
-		component_variable_type_matrix4x3,
-		component_variable_type_enum,
-		
-		/* unused for now */
-		component_variable_type_function
-	} type;
-
 	/*
 	 * hidden should be a boolean, but is an enum
 	 * for the potential of more flags later on
