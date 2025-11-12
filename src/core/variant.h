@@ -3,37 +3,41 @@
 
 #include "types.h"
 
+typedef enum {
+	variant_type_null,
+	variant_type_u8,
+	variant_type_u16,
+	variant_type_u32,
+	variant_type_u64,
+	variant_type_i8,
+	variant_type_i16,
+	variant_type_i32,
+	variant_type_i64,
+	variant_type_f32,
+	variant_type_f64,
+	variant_type_boolean,
+	variant_type_string,
+	variant_type_vector2,
+	variant_type_vector3,
+	variant_type_vector4,
+	variant_type_matrix2,
+	variant_type_matrix2x3,
+	variant_type_matrix2x4,
+	variant_type_matrix3,
+	variant_type_matrix3x2,
+	variant_type_matrix3x4,
+	variant_type_matrix4,
+	variant_type_matrix4x2,
+	variant_type_matrix4x3,
+	variant_type_enum,
+	/* reference to an object */
+	variant_type_object,
+	
+	variant_type_max
+} variant_type_t;
+
 typedef struct {
-	enum variant_type {
-		variant_type_null,
-		variant_type_u8,
-		variant_type_u16,
-		variant_type_u32,
-		variant_type_u64,
-		variant_type_i8,
-		variant_type_i16,
-		variant_type_i32,
-		variant_type_i64,
-		variant_type_f32,
-		variant_type_f64,
-		variant_type_boolean,
-		variant_type_string,
-		variant_type_vector2,
-		variant_type_vector3,
-		variant_type_vector4,
-		variant_type_matrix2,
-		variant_type_matrix2x3,
-		variant_type_matrix2x4,
-		variant_type_matrix3,
-		variant_type_matrix3x2,
-		variant_type_matrix3x4,
-		variant_type_matrix4,
-		variant_type_matrix4x2,
-		variant_type_matrix4x3,
-		variant_type_enum,
-		
-		variant_type_max
-	} type;
+	variant_type_t type;
 	void* data;
 } variant_t;
 

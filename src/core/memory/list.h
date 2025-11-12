@@ -10,7 +10,9 @@ typedef struct {
 } list_t;
 
 
-void list_initilize(list_t* list, length start_capacity, length item_size);
+void list_init(list_t* list, length start_capacity, length item_size);
+
+void* list_get(list_t* list, length index);
 
 /* assumes the size of `data` is the same as list->item_size */
 void list_push(list_t* list, void* data);

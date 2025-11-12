@@ -1,9 +1,9 @@
-#include "core/component_registry.h"
+#include "core/object_registry.h"
 #include "core/utilites/os.h"
 #include "core/utilites/console.h"
 #include "core/memory/memory.h"
+#include "core/memory/hashed_string.h"
 
-#include "modules.h"
 #include "camera/camera.h"
 #include "collider/collider.h"
 
@@ -25,33 +25,27 @@ int main() {
 	console_write_error_va("ok ok, theres no way error va works too... %s\n\n", "it also works!!");
 
 	printf("Home Path > %s\n", os_get_home());
-	printf("Log Path > %s\n\n", os_get_log_path());
+	
+	char* log_path = os_get_log_path();
+	printf("Log Path > %s\n\n", log_path);
+	TKP_FREE(log_path);
 
-	modules_register();
-	component_registry_t* registry = component_registry_get();
-	component_camera_t* camera = (component_camera_t*)component_registry_get_component("camera")->create();
+	object_registry_init();
+	object_definition_t* camera_def = object_registry_get_by_name(hashed_string_generate("camera"));
+	component_camera_t* camera = (component_camera_t*)object_registry_create(camera_def);
 	camera->base.start((component_t*)camera);
 
-	component_collider_t* collider = (component_collider_t*)component_registry_get_component("collider")->create();
+	object_definition_t* collider_def = object_registry_get_by_name(hashed_string_generate("collider"));
+	component_collider_t* collider = (component_collider_t*)object_registry_create(collider_def);
 	collider->base.start((component_t*)collider);
 
-	for (u8 i = 0; i < registry->count; ++i) {
-		console_write_va("Component > %s\n", registry->components[i].name);
-
-		component_variable_t* variable;
-		u8 j = 0;
-		while ((variable = &registry->components[i].variables[j])->name != NULL) {
-			console_write_va("\tVariable > %s\n", variable->name);
-			console_write_va("\t\tHash > %d\n", variable->hash);
-			console_write_va("\t\tOffset > %d\n", variable->offset);
-			console_write_va("\t\tType > %d\n", variable->type);
-			console_write_va("\t\tFlags > %d\n", variable->flags);
-			j++;
-		}
-	}
+#if defined(DEBUG)
+	object_registry_print_debug_info();
+#endif
 
 	TKP_FREE(camera);
+	TKP_FREE(collider);
 	
-	component_registry_free();
+	object_registry_free();
 	console_free();
 }

@@ -32,6 +32,14 @@ def generate_c_file():
         if os.path.isfile("modules/" + m + "/register_module.h"):
             fd.write("\tregister_module_" + m + "();\n")
 
+    fd.write("}\n")
+
+    fd.write("\nvoid modules_deregister() {\n")
+
+    for m in modules:
+        if os.path.isfile("modules/" + m + "/register_module.h"):
+            fd.write("\tderegister_module_" + m + "();\n")
+
     fd.write("}")
 
     fd.close()

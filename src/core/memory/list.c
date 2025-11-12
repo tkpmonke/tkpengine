@@ -4,11 +4,15 @@
 
 #include <string.h>
 
-void list_initilize(list_t* list, length start_capacity, length item_size) {
+void list_init(list_t* list, length start_capacity, length item_size) {
 	list->item_size = item_size;
 	list->capacity = start_capacity;
 	list->data = TKP_MALLOC(start_capacity*item_size);
 	list->size = 0;
+}
+
+void* list_get(list_t* list, length index) {
+	return list->data+index*list->item_size;
 }
 
 void list_push(list_t* list, void* data) {

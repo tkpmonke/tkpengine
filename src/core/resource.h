@@ -1,8 +1,9 @@
 #pragma once
 
 #include "types.h"
+#include "object.h"
 
 typedef struct {
+	object_t base;
 	string path;
-	void* data;
 } resource_t;

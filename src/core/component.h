@@ -1,10 +1,10 @@
 #pragma once
 
-#include "types.h"
+#include "object.h"
 
 typedef struct component {
-	length type;
-	struct object* parent;
+	object_t base;
+	struct entity_t* parent;
 
 	void (*start)(struct component* self);
 
