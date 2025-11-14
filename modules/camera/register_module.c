@@ -12,7 +12,7 @@ object_t* create_camera_component() {
 	c->fixed_update = NULL;
 	c->update = component_camera_update;
 	c->render = NULL;
-	c->post_render = NULL;
+	c->post_render = component_camera_post_render;
 	c->shutdown = component_camera_shutdown;
 	return (object_t*)c;
 }
@@ -53,6 +53,7 @@ void register_module_camera() {
 	object_definition_t definition = {
 		.name = hashed_string_generate("camera"),
 		.unhashed_name = "camera",
+		.base_type = object_registry_get_by_name(hashed_string_generate("component"))->type,
 		.create_func = create_camera_component,
 		.variables = variables
 	};

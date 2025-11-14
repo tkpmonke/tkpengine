@@ -21,15 +21,11 @@ typedef struct {
 		orthographic
 	} projection_mode;
 
-	/* 
-	 * nothing is last instead of 0
-	 * since we don't really want that to be
-	 * default
-	 */
 	enum component_camera_clear_mode {
 		skybox,
 		clear_color,
-		nothing
+		nothing,
+		dont_clear
 	} clear_mode;
 } component_camera_t;
 

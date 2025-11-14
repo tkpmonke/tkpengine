@@ -42,7 +42,7 @@ string os_get_log_path() {
 		char* home = os_get_home();
 		length home_len = strlen(home);
 
-		cache = malloc(home_len);
+		cache = malloc(home_len+8);
 		memcpy(cache, home, home_len);
 		memcpy(cache+home_len, "/.cache", 7);
 	}
@@ -51,11 +51,11 @@ string os_get_log_path() {
 	length log_len = strlen(logs_dir);
 	length logs_file_name_len = strlen(logs_dir);
 
-	string path = (string)malloc(cache_len+log_len+logs_file_name_len);
+	string path = (string)malloc(cache_len+log_len+logs_file_name_len+1);
 	memcpy(path, cache, cache_len);
 	memcpy(path+cache_len, logs_dir, log_len);
 
-	struct stat st;
+	struct stat st = {0};
 	if (stat(path, &st) != 0) {
 		os_recursive_mkdir(path);
 	}
