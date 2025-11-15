@@ -12,10 +12,12 @@ module_names: 'dict[str, Module]' = dict()
 
 
 class Module:
-    name: str = ""
-    parent: str = ""
-    children: 'list[Module]' = []
-    depth: int = 1
+
+    def __init__(self, name: str):
+        self.name: str = name
+        self.parent: str = ""
+        self.children = []
+        self.depth: int = 1
 
     def has_parent(self):
         try:
@@ -33,10 +35,6 @@ class Module:
     def parse(self):
         try:
             with open("modules/" + self.name + "/module_info", "r") as fd:
-                if fd is None:
-                    print(self.name + "has no module_info file")
-                    return
-
                 for line in fd:
                     values: 'list[str]' = line.split('=')
 
@@ -48,9 +46,6 @@ class Module:
                             self.parent = values[1][:-1]
                             module_names[self.parent].children.append(self)
                             self.depth = module_names[self.parent].depth+1
-                            print(self.parent)
-                            print(self.name)
-                            print(len(self.children))
                             return 2
 
         except FileNotFoundError:
@@ -113,12 +108,8 @@ def generate_c_file():
     fd.write("/* auto generated initilzation for modules */\n\n")
 
     for m in module_dirs:
-        print("Module " + m + " has been found")
         if os.path.isfile("modules/" + m + "/register_module.h"):
-            module: Module = Module()
-            module.name = m
-            module.children = []
-            print("Module " + m + " exists")
+            module: Module = Module(m)
             module_names[m] = module
 
             if not module.has_parent():

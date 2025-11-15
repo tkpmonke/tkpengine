@@ -1,5 +1,5 @@
 #include "register_module.h"
-#include "texture.h"
+#include "render_texture.h"
 #include "core/object_registry.h"
 #include "core/memory/hashed_string.h"
 #include "core/memory/memory.h"
