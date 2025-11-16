@@ -1,7 +1,7 @@
 #pragma once
 
 #include "core/component.h"
-#include "core/utilites/math/matrices.h"
+#include "math/matrices.h"
 
 typedef struct {
 	component_t base;

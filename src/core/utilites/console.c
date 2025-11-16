@@ -1,9 +1,12 @@
-#include "console.h"
-#include "os.h"
 #include "../types.h"
 #include "../memory/memory.h"
-#include "string.h"
+#include "../version.h"
 
+#include "console.h"
+#include "os.h"
+#include "str.h"
+
+#include <string.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -21,9 +24,20 @@ static FILE* console = NULL;
 
 void console_init(void) {
 	console = stdout;
+	console_write_va("TKPEngine %s\nCompiled on %s at %s\n\n", TKP_GET_VERSION_STRING(), __DATE__, __TIME__);
+
+	printf("Home Path > %s\n", os_get_home());
+	if (log_file != NULL) {
+		char* log_path = os_get_log_path();
+		console_write_va("Log Path > %s\n\n", log_path);
+		TKP_FREE(log_path);
+	} else {
+		console_write("Log Path > Disabled\n\n");
+	}
+
 }
 
-void console_init_log_file(char* path) {
+void console_init_log_file(string path) {
 	boolean b = FALSE;
 	if (path == NULL) {
 		path = os_get_log_path();
@@ -44,7 +58,7 @@ void console_set_console_file(FILE* file) {
 	console = file;
 }
 
-void console_write(char* message) {
+void console_write(string message) {
 	if (console != NULL) {
 		os_write(message, strlen(message), console->_fileno);
 	} if (log_file != NULL) {
@@ -52,7 +66,7 @@ void console_write(char* message) {
 	}
 }
 
-void console_write_len(char* message, length len) {
+void console_write_len(string message, length len) {
 	if (console != NULL) {
 		os_write(message, len, console->_fileno);
 	} if (log_file != NULL) {
@@ -60,7 +74,7 @@ void console_write_len(char* message, length len) {
 	}
 }
 
-void console_write_warning(char* warning) {
+void console_write_warning(string warning) {
 	if (console != NULL) {
 		os_write("\x1b[1;4;33mWarning:\x1b[0m ", 22, console->_fileno);
 		os_write(warning, strlen(warning), console->_fileno);
@@ -70,7 +84,7 @@ void console_write_warning(char* warning) {
 	}
 }
 
-void console_write_error(char* error) {
+void console_write_error(string error) {
 	length len = strlen(error);
 	if (console != NULL) {
 		os_write("\x1b[1;4;31mError:\x1b[0m ", 20, console->_fileno);
@@ -139,5 +153,7 @@ void console_write_error_va(string error, ...) {
 }
 
 void console_free(void) {
-	fclose(log_file);
+	if (log_file != NULL) {
+		fclose(log_file);
+	}
 }

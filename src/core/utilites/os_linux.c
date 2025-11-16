@@ -45,6 +45,7 @@ string os_get_log_path() {
 		cache = malloc(home_len+8);
 		memcpy(cache, home, home_len);
 		memcpy(cache+home_len, "/.cache", 7);
+		cache[home_len+7] = '\0';
 	}
 
 	length cache_len = strlen(cache);
@@ -54,6 +55,7 @@ string os_get_log_path() {
 	string path = (string)malloc(cache_len+log_len+logs_file_name_len+1);
 	memcpy(path, cache, cache_len);
 	memcpy(path+cache_len, logs_dir, log_len);
+	path[cache_len+log_len] = '\0';
 
 	struct stat st = {0};
 	if (stat(path, &st) != 0) {
@@ -61,6 +63,7 @@ string os_get_log_path() {
 	}
 
 	memcpy(path+cache_len+log_len, logs_file_name, logs_file_name_len);
+	path[cache_len+log_len+logs_file_name_len] = '\0';
 
 	if (b) {
 		free(cache); 
@@ -103,7 +106,7 @@ boolean os_mkdir(string directory) {
  * "inspired" by 
  * https://gist.github.com/JonathonReinhart/8c0d90191c38af2dcadb102c4e202950 
  *
- * "inspired" as in copyed and converted into my formatting :var:
+ * "inspired" as in copyed and converted into my formatting :3
  */
 void os_recursive_mkdir(string path) {
 	length path_len = strlen(path);
