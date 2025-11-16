@@ -48,7 +48,8 @@ void object_registry_free() {
 void object_registry_print_debug_info() {
 	for (u8 i = 0; i < _object_registry.size; ++i) {
 		object_definition_t* def = (object_definition_t*)list_get(&_object_registry, i);
-		console_write_va("Component > %s\n", def->unhashed_name);
+		console_write_va("Object > %s\n", def->unhashed_name);
+		console_write_va("\tBase Type > %s\n", object_registry_get_by_id(def->base_type)->unhashed_name);
 
 		for (int i = 0; TRUE; ++i) {
 			object_variable_t* variable = &def->variables[i];

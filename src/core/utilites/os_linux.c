@@ -49,7 +49,7 @@ string os_get_log_path() {
 
 	length cache_len = strlen(cache);
 	length log_len = strlen(logs_dir);
-	length logs_file_name_len = strlen(logs_dir);
+	length logs_file_name_len = strlen(logs_file_name);
 
 	string path = (string)malloc(cache_len+log_len+logs_file_name_len+1);
 	memcpy(path, cache, cache_len);

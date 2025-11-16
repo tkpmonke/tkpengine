@@ -39,9 +39,11 @@ int main() {
 	component_collider_t* collider = (component_collider_t*)object_registry_create(collider_def);
 	collider->base.start((component_t*)collider);
 
+	/*
 #if defined(DEBUG)
 	object_registry_print_debug_info();
 #endif
+	*/
 
 	TKP_FREE(camera);
 	TKP_FREE(collider);
