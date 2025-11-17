@@ -19,10 +19,17 @@
  *	consider waiting until the end of the frame as up-to-date)
  */
 
-static FILE* log_file = NULL;
-static FILE* console = NULL;
+static FILE* _log_file = NULL;
+static FILE* _console = NULL;
 
-void console_init(void) {
+static const string _help_message =
+"-h/--help\t-\tprints this help message\n"
+"--width\t\t-\tspecify custom window width\n"
+"--height\t-\tspecify custom window height\n"
+"--log-path\t-\tspecify custom log path (default is ~/.cache/tkpengine/logs/log.txt)\n"
+"--no-header\t-\tdon't print the starting header\n\n";
+
+void console_init(arguments_t* args) {
 #if defined(__linux__)
 	const string os = "linux";
 #elif defined(__unix__)
@@ -32,18 +39,32 @@ void console_init(void) {
 #else
 	const string os = "undefined";
 #endif
-	console = stdout;
-	console_write_va("TKPEngine %s-%s\nCompiled on %s at %s\n\n", TKP_GET_VERSION_STRING(), os, __DATE__, __TIME__);
 
-	printf("Home Path > %s\n", os_get_home());
-	if (log_file != NULL) {
-		char* log_path = os_get_log_path();
-		console_write_va("Log Path > %s\n\n", log_path);
-		TKP_FREE(log_path);
-	} else {
-		console_write("Log Path > Disabled\n\n");
+	_console = stdout;
+
+	if (args->print_header == TRUE) {
+		console_write_va("TKPEngine %s-%s\nCompiled on %s at %s\n\n", TKP_GET_VERSION_STRING(), os, __DATE__, __TIME__);
+		console_write_va("Home Path > %s\n", os_get_home());
+
+		if (_log_file != NULL) {
+			if (args->log_path == NULL) {
+			char* log_path = os_get_log_path();
+			console_write_va("Log Path > %s\n\n", log_path);
+			TKP_FREE(log_path);
+			} else {
+				console_write_va("Log Path > %s\n\n", args->log_path);
+			}
+		} else {
+			console_write("Log Path > Disabled\n\n");
+		}
 	}
 
+	if (args->print_help_message == TRUE) {
+		console_write(_help_message);
+		console_free();
+		TKP_FREE(args);
+		exit(0);
+	}
 }
 
 void console_init_log_file(string path) {
@@ -53,8 +74,8 @@ void console_init_log_file(string path) {
 		b = TRUE;
 	}
 
-	log_file = fopen(path, "w");
-	if (log_file == NULL) {
+	_log_file = fopen(path, "w");
+	if (_log_file == NULL) {
 		console_write_error("Log file could not be found nor created\n");
 	}
 	
@@ -64,46 +85,46 @@ void console_init_log_file(string path) {
 }
 
 void console_set_console_file(FILE* file) {
-	console = file;
+	_console = file;
 }
 
 void console_write(string message) {
-	if (console != NULL) {
-		os_write(message, strlen(message), console->_fileno);
-	} if (log_file != NULL) {
-		os_write(message, strlen(message), log_file->_fileno);
+	if (_console != NULL) {
+		os_write(message, strlen(message), _console->_fileno);
+	} if (_log_file != NULL) {
+		os_write(message, strlen(message), _log_file->_fileno);
 	}
 }
 
 void console_write_len(string message, length len) {
-	if (console != NULL) {
-		os_write(message, len, console->_fileno);
-	} if (log_file != NULL) {
-		os_write(message, len, log_file->_fileno);
+	if (_console != NULL) {
+		os_write(message, len, _console->_fileno);
+	} if (_log_file != NULL) {
+		os_write(message, len, _log_file->_fileno);
 	}
 }
 
 void console_write_warning(string warning) {
-	if (console != NULL) {
-		os_write("\x1b[1;4;33mWarning:\x1b[0m ", 22, console->_fileno);
-		os_write(warning, strlen(warning), console->_fileno);
-	} if (log_file != NULL) {
-		os_write("Warning: ", 9, log_file->_fileno);
-		os_write(warning, strlen(warning), log_file->_fileno);
+	if (_console != NULL) {
+		os_write("\x1b[1;4;33mWarning:\x1b[0m ", 22, _console->_fileno);
+		os_write(warning, strlen(warning), _console->_fileno);
+	} if (_log_file != NULL) {
+		os_write("Warning: ", 9, _log_file->_fileno);
+		os_write(warning, strlen(warning), _log_file->_fileno);
 	}
 }
 
 void console_write_error(string error) {
 	length len = strlen(error);
-	if (console != NULL) {
-		os_write("\x1b[1;4;31mError:\x1b[0m ", 20, console->_fileno);
+	if (_console != NULL) {
+		os_write("\x1b[1;4;31mError:\x1b[0m ", 20, _console->_fileno);
 		if (len > 0) {
-			os_write(error, len, console->_fileno);
+			os_write(error, len, _console->_fileno);
 		}
-	} if (log_file != NULL) {
-		os_write("Error: ", 7, log_file->_fileno);
+	} if (_log_file != NULL) {
+		os_write("Error: ", 7, _log_file->_fileno);
 		if (len > 0) {
-			os_write(error, len, log_file->_fileno);
+			os_write(error, len, _log_file->_fileno);
 		}
 	}
 }
@@ -162,7 +183,7 @@ void console_write_error_va(string error, ...) {
 }
 
 void console_free(void) {
-	if (log_file != NULL) {
-		fclose(log_file);
+	if (_log_file != NULL) {
+		fclose(_log_file);
 	}
 }
