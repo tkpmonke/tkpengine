@@ -23,8 +23,17 @@ static FILE* log_file = NULL;
 static FILE* console = NULL;
 
 void console_init(void) {
+#if defined(__linux__)
+	const string os = "linux";
+#elif defined(__unix__)
+	const string os = "unix";
+#elif defined(_WIN32)
+	const string os = "windows";
+#else
+	const string os = "undefined";
+#endif
 	console = stdout;
-	console_write_va("TKPEngine %s\nCompiled on %s at %s\n\n", TKP_GET_VERSION_STRING(), __DATE__, __TIME__);
+	console_write_va("TKPEngine %s-%s\nCompiled on %s at %s\n\n", TKP_GET_VERSION_STRING(), os, __DATE__, __TIME__);
 
 	printf("Home Path > %s\n", os_get_home());
 	if (log_file != NULL) {

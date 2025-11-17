@@ -3,8 +3,9 @@ workspace "test-engine"
 	configurations { "Debug", "Release"}
 
 include "external/cglm/cglm.lua"
+include "external/rgfw/rgfw.lua"
 
-project "test-engine"
+project "tkpengine"
 
 	-- ensure up to date modules when building
 	prebuildcommands {
@@ -20,13 +21,9 @@ project "test-engine"
 	includedirs { "src", "modules", "external/cglm" }
 	files { "src/**.c", "modules/**.c", "src/**.h", "modules/**.h" }
 
+	links { "cglm", "rgfw" }
+
 	warnings "Extra"
-
-	-- filter "system:linux" 
-	-- 	links { "X11", "Xrandr", "GL", "GLX", "m" }
-
-	-- filter "system:windows"
-	-- 	links { "gdi32", "user32", "shell32", "opengl32", "glu32", "m" }
 
 	filter "configurations:Debug"
 		defines { "DEBUG" }
@@ -45,9 +42,8 @@ project "test-editor"
 	files { "editor/**.c", "editor/**.h" }
 
 	warnings "Extra"
-	--sanitize { "Address", "UndefinedBehavior" }
 
-	links { "test-engine" }
+	links { "tkpengine" }
 
 	filter "configurations:Debug"
 		defines { "DEBUG" }
