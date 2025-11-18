@@ -6,6 +6,7 @@
 
 #define RGFW_IMPORT
 #define RGFW_OPENGL
+#define RGFW_INT_DEFINED
 #include "../../external/rgfw/RGFW.h"
 
 void window_init(window_t* window, string name) {
