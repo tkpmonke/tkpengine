@@ -78,7 +78,7 @@ int main(int argc, string* argv) {
 	rendering_command_buffer cmd = rendering_interface->create_command_buffer();
 
 	while (window_ping(&root_window)) {
-		rendering_interface->clear();
+		rendering_interface->clear(0.0f, 0.0f, 0.0f, 1.0f);
 		rendering_interface->bind_pipeline(cmd, &pipeline);
 		rendering_interface->draw_indexed_buffer(cmd, vao, 6);
 		rendering_interface->execute_command_buffer(cmd, &root_window);

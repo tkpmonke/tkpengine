@@ -6,7 +6,7 @@
 
 #include <string.h>
 
-typedef list_t* opengl_command_buffer;
+typedef list_t opengl_command_buffer;
 
 typedef struct {
 	rendering_pipeline_t* pipeline;
@@ -216,7 +216,7 @@ rendering_pipeline_t opengl_create_graphics_pipeline(rendering_shader_t vertex, 
 }
 
 void opengl_bind_pipeline(rendering_command_buffer cmd, rendering_pipeline_t* pipeline) {
-	opengl_draw_command_t* draw_cmd = list_get((opengl_command_buffer)cmd, ((opengl_command_buffer)cmd)->size);
+	opengl_draw_command_t* draw_cmd = list_get((opengl_command_buffer*)cmd, ((opengl_command_buffer*)cmd)->size);
 	draw_cmd->pipeline = pipeline;
 }
 
@@ -227,7 +227,7 @@ void opengl_free_pipeline(rendering_pipeline_t* pipeline) {
 }
 
 void opengl_draw_buffer(rendering_command_buffer cmd,  vertex_attribute_object vao, length draw_count) {
-	opengl_draw_command_t* draw_cmd = list_get((opengl_command_buffer)cmd, ((opengl_command_buffer)cmd)->size);
+	opengl_draw_command_t* draw_cmd = list_get((opengl_command_buffer*)cmd, ((opengl_command_buffer*)cmd)->size);
 	draw_cmd->vao = vao;
 	draw_cmd->draw_count = draw_count;
 	draw_cmd->indexed = FALSE;
@@ -235,7 +235,7 @@ void opengl_draw_buffer(rendering_command_buffer cmd,  vertex_attribute_object v
 }
 
 void opengl_draw_indexed_buffer(rendering_command_buffer cmd, vertex_attribute_object vao, length draw_count) {
-	opengl_draw_command_t* draw_cmd = list_get((opengl_command_buffer)cmd, ((opengl_command_buffer)cmd)->size);
+	opengl_draw_command_t* draw_cmd = list_get((opengl_command_buffer*)cmd, ((opengl_command_buffer*)cmd)->size);
 	draw_cmd->vao = vao;
 	draw_cmd->draw_count = draw_count;
 	draw_cmd->indexed = TRUE;
@@ -243,15 +243,15 @@ void opengl_draw_indexed_buffer(rendering_command_buffer cmd, vertex_attribute_o
 }
 
 rendering_command_buffer opengl_create_command_buffer(void) {
-	rendering_command_buffer cmd = TKP_MALLOC(sizeof(opengl_command_buffer));
+	opengl_command_buffer* cmd = TKP_MALLOC(sizeof(opengl_command_buffer));
 	list_init(cmd, 32, sizeof(opengl_draw_command_t));
-	return cmd;
+	return (rendering_command_buffer)cmd;
 }
 
 void opengl_execute_command_buffer(rendering_command_buffer cmd, window_t* window) {
-	opengl_command_buffer glcmd = (opengl_command_buffer)cmd;
+	opengl_command_buffer* glcmd = (opengl_command_buffer*)cmd;
 	for (length i = 0; i < glcmd->size; ++i) {
-		opengl_draw_command_t* draw_cmd = list_get((opengl_command_buffer)cmd, i);
+		opengl_draw_command_t* draw_cmd = list_get(glcmd, i);
 
 		if (draw_cmd->pipeline->scissor.size[0] != 0
 		 && draw_cmd->pipeline->scissor.size[1] != 0) {
@@ -299,15 +299,16 @@ void opengl_execute_command_buffer(rendering_command_buffer cmd, window_t* windo
 }
 
 void opengl_clear_command_buffer(rendering_command_buffer cmd) {
-	((opengl_command_buffer)cmd)->size = 0;
+	((opengl_command_buffer*)cmd)->size = 0;
 }
 
 void opengl_free_command_buffer(rendering_command_buffer cmd) {
-	TKP_FREE(cmd);	
+	list_free(cmd);
+	TKP_FREE(cmd);
 }
 
-void opengl_clear(void) {
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+void opengl_clear(f32 r, f32 g, f32 b, f32 a) {
+	glClearColor(r, g, b, a);
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 

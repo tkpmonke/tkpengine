@@ -47,7 +47,7 @@ typedef struct {
 	void (*clear_command_buffer)(rendering_command_buffer cmd);
 	void (*free_command_buffer)(rendering_command_buffer cmd);
 
-	void (*clear)(void);
+	void (*clear)(f32 r, f32 g, f32 b, f32 a);
 	void (*swap_buffers)(window_t* window);
 
 	/* called by the windowing system to notify when viewport needs resized */
