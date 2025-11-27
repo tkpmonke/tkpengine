@@ -67,6 +67,14 @@ void list_copy_from(list_t* list, void* data, length start, length count) {
 	memcpy(list->data+start*list->item_size, data, count*list->item_size);
 }
 
+void list_increment(list_t* list) {
+	if (list->capacity < list->size+1) {
+		list_resize(list, list->capacity*2);
+	}
+
+	list->size += 1;
+}
+
 void list_free(list_t* list) {
 	TKP_FREE(list->data);
 	list->capacity = 0;

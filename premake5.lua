@@ -3,6 +3,7 @@ workspace "test-engine"
 	configurations { "Debug", "Release"}
 
 include "external/cglm/cglm.lua"
+include "external/glew/glew.lua"
 include "external/rgfw/rgfw.lua"
 
 project "tkpengine"
@@ -21,7 +22,7 @@ project "tkpengine"
 	includedirs { "src", "modules", "external/cglm" }
 	files { "src/**.c", "modules/**.c", "src/**.h", "modules/**.h" }
 
-	links { "cglm", "rgfw" }
+	links { "cglm", "glew", "rgfw" }
 
 	warnings "Extra"
 

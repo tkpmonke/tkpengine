@@ -31,4 +31,7 @@ void list_resize(list_t* list, length new_capacity);
 void list_copy_to(list_t* list, void* data, length start, length count);
 void list_copy_from(list_t* list, void* data, length start, length count);
 
+/* list_push but without copying data */
+void list_increment(list_t* list);
+
 void list_free(list_t* list);
