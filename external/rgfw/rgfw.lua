@@ -13,7 +13,12 @@ project "rgfw"
 
 	filter "system:windows"
 		links { "gdi32", "opengl32" }
-
+	
+	filter "system:emscripten"
+		cdialect "gnu99"
+		kind "StaticLib"
+		buildoptions { "-sMEMORY64=1" }
+		linkoptions { "-sMEMORY64=1", "-mwasm64" }
 
    filter "configurations:debug"
       defines { "DEBUG" }

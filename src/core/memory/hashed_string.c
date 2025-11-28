@@ -7,5 +7,5 @@ hashed_string hashed_string_generate(string s) {
 	for (length i = 0; i < strlen(s); ++i) {
 		hash = (hash ^ (uchar)s[i]) * 1099511628211ull;
 	}
-	return hash; 
+	return hash;
 }

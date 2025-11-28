@@ -1,20 +1,18 @@
 #include "loader_registry.h"
 
-#include <string.h>
 #include <stddef.h>
+#include <string.h>
 
-#define COUNTOF_ARRAY(x) sizeof(x)/sizeof(*x)
+#define COUNTOF_ARRAY(x) sizeof(x) / sizeof(*x)
 
 static loader_registry_t _loader_registry;
 
 void loader_registry_init(void) {
 	loader_t default_loaders[] = {
-		{
-			.output_type = 2,
-			.load = NULL,
-			.extensions = (string[]){ (string)"txt", (string)"md" },
-			.extension_count = 2
-		},
+		{ .output_type = 2,
+		  .load = NULL,
+		  .extensions = (string[]){ (string) "txt", (string) "md" },
+		  .extension_count = 2 },
 	};
 	list_init(&_loader_registry, COUNTOF_ARRAY(default_loaders), sizeof(loader_t));
 	list_copy_to(&_loader_registry, default_loaders, 0, COUNTOF_ARRAY(default_loaders));

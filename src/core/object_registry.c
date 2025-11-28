@@ -1,6 +1,6 @@
 #include "object_registry.h"
-#include "modules.h"
 #include "core_objects.h"
+#include "modules.h"
 
 static object_registry_t _object_registry;
 
@@ -43,7 +43,7 @@ void object_registry_free() {
 }
 
 #if defined(DEBUG)
-#include "utilites/console.h"
+	#include "utilites/console.h"
 
 void object_registry_print_debug_info() {
 	for (u8 i = 0; i < _object_registry.size; ++i) {
@@ -63,6 +63,5 @@ void object_registry_print_debug_info() {
 			console_write_va("\t\tOffset > %d\n", variable->offset);
 		}
 	}
-
 }
 #endif

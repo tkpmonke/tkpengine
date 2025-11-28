@@ -1,20 +1,22 @@
 #pragma once
 
-/* 
- * rendering api abstraction designed to have easy integration with any api into the engine
+/*
+ * rendering api abstraction designed to have easy integration with any api into
+ * the engine
  */
 
-#include "display/windowing/window.h"
 #include "core/types.h"
+#include "display/windowing/window.h"
 
-#include "pipeline.h"
 #include "buffer.h"
+#include "pipeline.h"
 #include "vertex_attributes.h"
 
 typedef void* rendering_command_buffer;
 
 /* basically a wrapper for a graphics api */
-typedef struct {
+typedef struct
+{
 	void (*init)(window_t* window);
 
 	boolean (*query_compute_support)(void);
@@ -25,12 +27,9 @@ typedef struct {
 	void (*free_buffer)(rendering_buffer_t* buffer);
 
 	/* index buffer should be NULL if there isn't one */
-	vertex_attribute_object (*create_vertex_attribute_object)(
-		vertex_attribute_t* attributes,
-		length count,
-		rendering_buffer_t* vertex_buffer,
-		rendering_buffer_t* index_buffer
-	);
+	vertex_attribute_object (*create_vertex_attribute_object)(vertex_attribute_t* attributes, length count,
+															  rendering_buffer_t* vertex_buffer,
+															  rendering_buffer_t* index_buffer);
 	void (*free_vertex_attribute_object)(vertex_attribute_object vao);
 
 	rendering_shader_t (*compile_shader)(string contents, rendering_shader_type_t type);

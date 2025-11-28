@@ -9,8 +9,7 @@ arguments_t* arguments_parse(int argc, string* argv) {
 	arguments->print_header = TRUE;
 
 	for (int i = 0; i < argc; ++i) {
-		if (strcmp(argv[i], "--help") == 0
-			   || strcmp(argv[i], "-h") == 0) {
+		if (strcmp(argv[i], "--help") == 0 || strcmp(argv[i], "-h") == 0) {
 			arguments->print_help_message = TRUE;
 		} else if (strcmp(argv[i], "--no-header") == 0) {
 			arguments->print_header = FALSE;

@@ -15,9 +15,10 @@ typedef enum {
 } rendering_buffer_usage_t;
 
 /* gpu buffer */
-typedef struct {
-	 length size;
-	 void* platform;
-	 rendering_buffer_usage_t usage;
-	 boolean is_mapped;
+typedef struct
+{
+	length size;
+	void* platform;
+	rendering_buffer_usage_t usage;
+	boolean is_mapped;
 } rendering_buffer_t;

@@ -1,10 +1,11 @@
 #pragma once
 
-#include "types.h"
 #include "component.h"
 #include "memory/list.h"
+#include "types.h"
 
-typedef struct entity_t {
+typedef struct entity_t
+{
 	object_t base;
 
 	string name;
@@ -12,4 +13,3 @@ typedef struct entity_t {
 
 	list_t components;
 } entity_t;
-

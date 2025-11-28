@@ -2,7 +2,8 @@
 
 #include "../core/types.h"
 
-typedef struct {
+typedef struct
+{
 	string name;
 	string version;
 } project_t;

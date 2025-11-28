@@ -2,7 +2,8 @@
 
 #include "../core/types.h"
 
-typedef struct {
+typedef struct
+{
 	length output_type;
 	void* (*load)(string data);
 

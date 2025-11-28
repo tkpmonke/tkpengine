@@ -6,13 +6,15 @@
 
 #include <string.h>
 
-typedef struct {
+typedef struct
+{
 	hashed_string name;
 	variant_type_t type;
 	length offset;
 } object_variable_t;
 
-typedef struct {
+typedef struct
+{
 	hashed_string name;
 	const char* const unhashed_name;
 	length type;

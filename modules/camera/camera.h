@@ -3,15 +3,18 @@
 #include "core/component.h"
 #include "math/matrices.h"
 
-typedef struct {
+typedef struct
+{
 	component_t base;
 
-	struct component_camera_matrices {
+	struct component_camera_matrices
+	{
 		matrix4 projection;
 		matrix4 view;
 	} matrices;
 
-	struct component_camera_clip_plane {
+	struct component_camera_clip_plane
+	{
 		float near;
 		float far;
 	} clip_plane;

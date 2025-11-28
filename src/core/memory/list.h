@@ -2,13 +2,13 @@
 
 #include "../types.h"
 
-typedef struct {
+typedef struct
+{
 	void* data;
 	length size;
 	length capacity;
 	uint32_t item_size;
 } list_t;
-
 
 void list_init(list_t* list, length start_capacity, length item_size);
 

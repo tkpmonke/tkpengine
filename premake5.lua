@@ -3,7 +3,7 @@ workspace "test-engine"
 	configurations { "Debug", "Release"}
 
 include "external/cglm/cglm.lua"
-include "external/glew/glew.lua"
+include "external/glad/glad.lua"
 include "external/rgfw/rgfw.lua"
 
 project "tkpengine"
@@ -22,7 +22,7 @@ project "tkpengine"
 	includedirs { "src", "modules", "external/cglm" }
 	files { "src/**.c", "modules/**.c", "src/**.h", "modules/**.h" }
 
-	links { "cglm", "glew", "rgfw" }
+	links { "cglm", "glad", "rgfw" }
 
 	warnings "Extra"
 
@@ -33,6 +33,14 @@ project "tkpengine"
 	filter "configurations:Release"
 		defines { "NDEBUG" }
 		optimize "On"
+	filter {}
+		
+	filter "system:emscripten"
+		cdialect "gnu99"
+		kind "StaticLib"
+		buildoptions { "-sMEMORY64=1" }
+		linkoptions { "-sMEMORY64=1", "-mwasm64" }
+
 
 project "test-editor"
 	kind "ConsoleApp"
@@ -53,4 +61,12 @@ project "test-editor"
 	filter "configurations:Release"
 		defines { "NDEBUG" }
 		optimize "On"
+
+	filter "system:emscripten"
+		cdialect "gnu99"
+		buildoptions { "-sMEMORY64=1" }
+		linkoptions { "-sMEMORY64=1", "-mwasm64" }
+		targetextension ".html"
+		
+		links { "tkpengine", "cglm", "glad", "rgfw" }
 

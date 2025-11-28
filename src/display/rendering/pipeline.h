@@ -7,7 +7,8 @@ typedef enum PACKED {
 	rendering_shader_fragment
 } rendering_shader_type_t;
 
-typedef struct {
+typedef struct
+{
 	void* platform;
 	rendering_shader_type_t type;
 } rendering_shader_t;
@@ -37,13 +38,15 @@ typedef enum PACKED {
 	rendering_pipeline_polygon_quads
 } rendering_pipeline_polygon_mode_t;
 
-typedef struct {
+typedef struct
+{
 	void* platform;
 	rect2i_t scissor;
 	rect2i_t viewport;
 
 	union {
-		struct {
+		struct
+		{
 			rendering_shader_t vertex;
 			rendering_shader_t fragment;
 		} graphics;

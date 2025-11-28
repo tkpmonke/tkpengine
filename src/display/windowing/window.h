@@ -10,7 +10,8 @@ typedef enum {
 	window_transparent,
 } window_flags_t;
 
-typedef struct {
+typedef struct
+{
 	rect2i_t rect;
 	void* platform;
 
@@ -20,6 +21,7 @@ typedef struct {
 void window_init(window_t* window, string name);
 void window_set_icon(window_t* window, u8* data, u32 width, u32 height);
 
+void* window_opengl_load_proc();
 void window_opengl_create_context(window_t* window);
 
 boolean window_ping(window_t* window);

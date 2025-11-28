@@ -2,9 +2,10 @@
 
 #include "../types.h"
 
-typedef struct {
+typedef struct
+{
 	char* log_path;
-	
+
 	u32 window_width;
 	u32 window_height;
 

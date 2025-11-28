@@ -1,14 +1,16 @@
-#include "../../external/glew/include/GL/glew.h"
-
-#include "opengl_rendering_interface.h"
 #include "core/memory/list.h"
 #include "core/memory/memory.h"
+#include "opengl_rendering_interface.h"
 
 #include <string.h>
 
+#if !defined(__EMSCRIPTEN__)
+#include "../../external/glad/include/glad/gl.h"
+
 typedef list_t opengl_command_buffer;
 
-typedef struct {
+typedef struct
+{
 	rendering_pipeline_t* pipeline;
 	vertex_attribute_object vao;
 	length draw_count;
@@ -17,51 +19,57 @@ typedef struct {
 } opengl_draw_command_t;
 
 static GLenum _buffer_usage_to_GLenum[] = {
-	0, /* data */
-	GL_ARRAY_BUFFER, /* vertex */
+	0,						 /* data */
+	GL_ARRAY_BUFFER,		 /* vertex */
 	GL_ELEMENT_ARRAY_BUFFER, /* index */
 };
 
-static GLenum _shader_type_to_GLenum[] = {
-	GL_VERTEX_SHADER,
-	GL_FRAGMENT_SHADER
-};
+static GLenum _shader_type_to_GLenum[] = { GL_VERTEX_SHADER, GL_FRAGMENT_SHADER };
 
-static GLenum _pipeline_polygon_mode_to_GLenum[] ={
-	GL_TRIANGLES,
-	GL_POINTS,
-	GL_LINES,
-	GL_TRIANGLE_STRIP,
-	GL_QUADS
-};
+static GLenum _pipeline_polygon_mode_to_GLenum[] = { GL_TRIANGLES, GL_POINTS, GL_LINES, GL_TRIANGLE_STRIP, GL_QUADS };
 
 static list_t _opengl_objects;
 
-GLenum variant_type_to_GLenum(variant_type_t type) {
+static GLenum variant_type_to_GLenum(variant_type_t type) {
 	switch (type) {
-		case (variant_type_f32): {
-			return GL_FLOAT;
-		} case (variant_type_f64): {
-			return GL_DOUBLE;
-		} case (variant_type_u16): {
-			return GL_UNSIGNED_SHORT;
-		} case (variant_type_u32): {
-			return GL_UNSIGNED_INT;
-		} case (variant_type_i8): {
-			return GL_BYTE;
-		} case (variant_type_i16): {
-			return GL_SHORT;
-		} case (variant_type_i32): {
-			return GL_INT;
-		} default: {
-			return GL_UNSIGNED_BYTE;
-		}
+	case (variant_type_f32):
+	{
+		return GL_FLOAT;
+	}
+	case (variant_type_f64):
+	{
+		return GL_DOUBLE;
+	}
+	case (variant_type_u16):
+	{
+		return GL_UNSIGNED_SHORT;
+	}
+	case (variant_type_u32):
+	{
+		return GL_UNSIGNED_INT;
+	}
+	case (variant_type_i8):
+	{
+		return GL_BYTE;
+	}
+	case (variant_type_i16):
+	{
+		return GL_SHORT;
+	}
+	case (variant_type_i32):
+	{
+		return GL_INT;
+	}
+	default:
+	{
+		return GL_UNSIGNED_BYTE;
+	}
 	}
 }
 
 void opengl_init(window_t* window) {
 	window_opengl_create_context(window);
-	glewInit();
+	gladLoadGL(window_opengl_load_proc());
 
 	list_init(&_opengl_objects, 32, sizeof(u32));
 }
@@ -78,7 +86,7 @@ boolean opengl_query_compute_support(void) {
 	glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 0, &work_group_count[0]);
 	glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 1, &work_group_count[1]);
 	glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 2, &work_group_count[2]);
-	
+
 	return work_group_count[0] > 0 && work_group_count[1] > 0 && work_group_count[2] > 0;
 }
 
@@ -114,11 +122,9 @@ rendering_buffer_t opengl_create_buffer(length size, rendering_buffer_usage_t us
 
 	list_push(&_opengl_objects, &b);
 
-	rendering_buffer_t buffer = {
-		.size = size,
-		.usage = usage,
-		.platform = list_get(&_opengl_objects, _opengl_objects.size-1)
-	};
+	rendering_buffer_t buffer = { .size = size,
+								  .usage = usage,
+								  .platform = list_get(&_opengl_objects, _opengl_objects.size - 1) };
 	return buffer;
 }
 
@@ -142,11 +148,9 @@ void opengl_free_buffer(rendering_buffer_t* buffer) {
 	glDeleteBuffers(1, (u32*)buffer->platform);
 }
 
-vertex_attribute_object opengl_create_vertex_attribute_object(
-	vertex_attribute_t* attributes,
-	length count,
-	rendering_buffer_t* vertex_buffer,
-	rendering_buffer_t* index_buffer) {
+vertex_attribute_object opengl_create_vertex_attribute_object(vertex_attribute_t* attributes, length count,
+															  rendering_buffer_t* vertex_buffer,
+															  rendering_buffer_t* index_buffer) {
 
 	u32 vao;
 	glGenVertexArrays(1, &vao);
@@ -159,12 +163,13 @@ vertex_attribute_object opengl_create_vertex_attribute_object(
 	}
 
 	for (length i = 0; i < count; ++i) {
-		glVertexAttribPointer(i, attributes[i].size, variant_type_to_GLenum(attributes[i].type), GL_FALSE, attributes[i].stride, (void*)(attributes->offset));
+		glVertexAttribPointer(i, attributes[i].size, variant_type_to_GLenum(attributes[i].type), GL_FALSE,
+							  attributes[i].stride, (void*)(attributes->offset));
 		glEnableVertexAttribArray(i);
 	}
 
 	list_push(&_opengl_objects, &vao);
-	return list_get(&_opengl_objects, _opengl_objects.size-1);
+	return list_get(&_opengl_objects, _opengl_objects.size - 1);
 }
 
 void opengl_free_vertex_attribute_object(vertex_attribute_object vao) {
@@ -180,10 +185,7 @@ rendering_shader_t opengl_compile_shader(string contents, rendering_shader_type_
 
 	list_push(&_opengl_objects, &s);
 
-	rendering_shader_t shader = {
-		.type = type,
-		.platform = list_get(&_opengl_objects, _opengl_objects.size-1)
-	};
+	rendering_shader_t shader = { .type = type, .platform = list_get(&_opengl_objects, _opengl_objects.size - 1) };
 	return shader;
 }
 
@@ -195,23 +197,19 @@ rendering_pipeline_t opengl_create_graphics_pipeline(rendering_shader_t vertex, 
 
 	list_push(&_opengl_objects, &p);
 	rendering_pipeline_t pipeline = {
-		.platform = list_get(&_opengl_objects, _opengl_objects.size-1),
-		.scissor = {
-			.position = { 0, 0 },
-			.size = { 0, 0 },
-		},
-		.shaders = {
-			.graphics = {
-				.vertex = vertex,
-				.fragment = fragment
-			}
-		},
+		.platform = list_get(&_opengl_objects, _opengl_objects.size - 1),
+		.scissor =
+			{
+					  .position = {0, 0},
+					  .size = {0, 0},
+					  },
+		.shaders = {.graphics = {.vertex = vertex, .fragment = fragment}					},
 		.type = rendering_pipeline_graphics,
 		.cull_mode = rendering_pipeline_cull_back,
 		.front_face = rendering_pipeline_front_cw,
 		.polygon_mode = rendering_pipeline_polygon_triangles,
 		.render_polygon_mode = rendering_pipeline_polygon_triangles
-	};
+	   };
 	return pipeline;
 }
 
@@ -226,7 +224,7 @@ void opengl_free_pipeline(rendering_pipeline_t* pipeline) {
 	glDeleteShader(*(u32*)pipeline->shaders.graphics.fragment.platform);
 }
 
-void opengl_draw_buffer(rendering_command_buffer cmd,  vertex_attribute_object vao, length draw_count) {
+void opengl_draw_buffer(rendering_command_buffer cmd, vertex_attribute_object vao, length draw_count) {
 	opengl_draw_command_t* draw_cmd = list_get((opengl_command_buffer*)cmd, ((opengl_command_buffer*)cmd)->size);
 	draw_cmd->vao = vao;
 	draw_cmd->draw_count = draw_count;
@@ -253,47 +251,31 @@ void opengl_execute_command_buffer(rendering_command_buffer cmd, window_t* windo
 	for (length i = 0; i < glcmd->size; ++i) {
 		opengl_draw_command_t* draw_cmd = list_get(glcmd, i);
 
-		if (draw_cmd->pipeline->scissor.size[0] != 0
-		 && draw_cmd->pipeline->scissor.size[1] != 0) {
-			glViewport(
-				draw_cmd->pipeline->viewport.position[0],
-				draw_cmd->pipeline->viewport.position[1],
-				draw_cmd->pipeline->viewport.size[0],
-				draw_cmd->pipeline->viewport.size[1]
-			);
+		if (draw_cmd->pipeline->viewport.size[0] != 0 && draw_cmd->pipeline->viewport.size[1] != 0) {
+			glViewport(draw_cmd->pipeline->viewport.position[0], draw_cmd->pipeline->viewport.position[1],
+					   draw_cmd->pipeline->viewport.size[0], draw_cmd->pipeline->viewport.size[1]);
 		}
 
-		if (draw_cmd->pipeline->scissor.size[0] != 0
-		 && draw_cmd->pipeline->scissor.size[1] != 0) {
+		if (draw_cmd->pipeline->scissor.size[0] != 0 && draw_cmd->pipeline->scissor.size[1] != 0) {
 			glEnable(GL_SCISSOR_TEST);
-			glScissor(
-				draw_cmd->pipeline->scissor.position[0],
-				draw_cmd->pipeline->scissor.position[1],
-				draw_cmd->pipeline->scissor.size[0],
-				draw_cmd->pipeline->scissor.size[1]
-			);
+			glScissor(draw_cmd->pipeline->scissor.position[0], draw_cmd->pipeline->scissor.position[1],
+					  draw_cmd->pipeline->scissor.size[0], draw_cmd->pipeline->scissor.size[1]);
 		} else {
 			glDisable(GL_SCISSOR_TEST);
 		}
-		
+
 		glUseProgram(*(u32*)draw_cmd->pipeline->platform);
 		glBindVertexArray(*(u32*)draw_cmd->vao);
 
 		if (draw_cmd->indexed) {
-			glDrawElements(_pipeline_polygon_mode_to_GLenum[draw_cmd->pipeline->polygon_mode], draw_cmd->draw_count, GL_UNSIGNED_INT, 0);
+			glDrawElements(_pipeline_polygon_mode_to_GLenum[draw_cmd->pipeline->polygon_mode], draw_cmd->draw_count,
+						   GL_UNSIGNED_INT, 0);
 		} else {
 			glDrawArrays(_pipeline_polygon_mode_to_GLenum[draw_cmd->pipeline->polygon_mode], 0, draw_cmd->draw_count);
 		}
 
-
-		if (draw_cmd->pipeline->scissor.size[0] != 0
-		 && draw_cmd->pipeline->scissor.size[1] != 0) {
-			glViewport(
-				0,
-				0,
-				window->rect.size[0],
-				window->rect.size[1]
-			);
+		if (draw_cmd->pipeline->viewport.size[0] != 0 && draw_cmd->pipeline->viewport.size[1] != 0) {
+			glViewport(0, 0, window->rect.size[0], window->rect.size[1]);
 		}
 	}
 }
@@ -317,12 +299,7 @@ void opengl_swap_buffers(window_t* window) {
 }
 
 void opengl_resize(window_t* window) {
-	glViewport(
-		0,
-		0,
-		window->rect.size[0],
-		window->rect.size[1]
-	);
+	glViewport(0, 0, window->rect.size[0], window->rect.size[1]);
 }
 
 void opengl_free(void) {
@@ -369,3 +346,5 @@ rendering_interface_t* opengl_create_rendering_interface(void) {
 
 	return interface;
 }
+
+#endif /* __EMSCRIPTEN__ */

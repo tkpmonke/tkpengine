@@ -3,7 +3,8 @@
 #include "core/types.h"
 #include "core/variant.h"
 
-typedef struct {
+typedef struct
+{
 	length size;
 	length stride;
 	length offset;

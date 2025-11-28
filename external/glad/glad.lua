@@ -1,13 +1,10 @@
--- BUILD CGLM 0.9.6
-
-project "cglm"
+project "glad"
 	kind "SharedLib"
 	language "C"
 	cdialect "c99"
 	targetdir "../../bin"
 
-	includedirs { "cglm" }
-	files { "src/**.c", "cglm/**.h" }
+	includedirs { "include" }
 	
 	links { "GL", "m" }
 
@@ -20,9 +17,11 @@ project "cglm"
 		defines { "NDEBUG" }
 		optimize "On"
 	
-
 	filter "system:emscripten"
+		files { "src/gles2.c", "**.h" }
 		cdialect "gnu99"
 		kind "StaticLib"
 		buildoptions { "-sMEMORY64=1" }
 		linkoptions { "-sMEMORY64=1", "-mwasm64" }
+	filter "not system:emscripten"
+		files { "src/gl.c", "**.h" }

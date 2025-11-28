@@ -2,7 +2,8 @@
 
 #include "object.h"
 
-typedef struct component {
+typedef struct component
+{
 	object_t base;
 	struct entity_t* parent;
 
@@ -15,6 +16,6 @@ typedef struct component {
 	void (*update)(struct component* self, float delta);
 	void (*render)(struct component* self);
 	void (*post_render)(struct component* self);
-	
+
 	void (*shutdown)(struct component* self);
 } component_t;

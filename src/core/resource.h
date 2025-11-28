@@ -1,9 +1,10 @@
 #pragma once
 
-#include "types.h"
 #include "object.h"
+#include "types.h"
 
-typedef struct {
+typedef struct
+{
 	object_t base;
 	string path;
 } resource_t;

@@ -1,7 +1,7 @@
 #pragma once
 
-#include <stdio.h>
 #include <stdarg.h>
+#include <stdio.h>
 
 #include "../types.h"
 #include "arguments.h"

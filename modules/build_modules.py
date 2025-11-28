@@ -65,7 +65,7 @@ class Module:
             fd.write(s + "register_module_" + self.name + "();")
 
         if len(self.children) != 0:
-            fd.write(" {\n")
+            fd.write("\n" + s + "{\n")
             for i in self.children:
                 i.register(fd)
             fd.write(s + "}\n")
@@ -81,7 +81,7 @@ class Module:
             fd.write(s + "deregister_module_" + self.name + "();")
 
         if len(self.children) != 0:
-            fd.write(" {\n")
+            fd.write("\n" + s + "{\n")
             for i in self.children:
                 i.deregister(fd)
             fd.write(s + "}\n")

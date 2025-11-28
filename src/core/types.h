@@ -4,7 +4,7 @@
 	#if defined(__GNUC__)
 		#define PACKED __attribute__((__packed__))
 	#else
-		#define PACKED 
+		#define PACKED
 	#endif
 #endif
 

@@ -1,23 +1,23 @@
-#include "os.h"
-#include "console.h"
 #include "../memory/memory.h"
+#include "console.h"
+#include "os.h"
 
 /* ik i don't need to check for *all* of these, but why not */
-#if defined(__unix__) || defined(__linux__) || defined(__gnu_linux__)
+#if !defined (__EMSCRIPTEN__) && (defined(__unix__) || defined(__linux__) || defined(__gnu_linux__))
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
+	#include <stdio.h>
+	#include <stdlib.h>
+	#include <string.h>
 
-#include <errno.h>
-#include <unistd.h>
-#include <sys/stat.h>
+	#include <errno.h>
+	#include <sys/stat.h>
+	#include <unistd.h>
 
 string os_get_home() {
 	const string home_is_not_set_error = "$HOME is not set\n";
 	u8 home_is_not_set_error_len = 17;
 	string home = getenv("HOME");
-	
+
 	if (home == NULL) {
 		os_write((char*)home_is_not_set_error, home_is_not_set_error_len, stdout->_fileno);
 		return NULL;
@@ -42,38 +42,38 @@ string os_get_log_path() {
 		char* home = os_get_home();
 		length home_len = strlen(home);
 
-		cache = malloc(home_len+8);
+		cache = malloc(home_len + 8);
 		memcpy(cache, home, home_len);
-		memcpy(cache+home_len, "/.cache", 7);
-		cache[home_len+7] = '\0';
+		memcpy(cache + home_len, "/.cache", 7);
+		cache[home_len + 7] = '\0';
 	}
 
 	length cache_len = strlen(cache);
 	length log_len = strlen(logs_dir);
 	length logs_file_name_len = strlen(logs_file_name);
 
-	string path = (string)malloc(cache_len+log_len+logs_file_name_len+1);
+	string path = (string)malloc(cache_len + log_len + logs_file_name_len + 1);
 	memcpy(path, cache, cache_len);
-	memcpy(path+cache_len, logs_dir, log_len);
-	path[cache_len+log_len] = '\0';
+	memcpy(path + cache_len, logs_dir, log_len);
+	path[cache_len + log_len] = '\0';
 
-	struct stat st = {0};
+	struct stat st = { 0 };
 	if (stat(path, &st) != 0) {
 		os_recursive_mkdir(path);
 	}
 
-	memcpy(path+cache_len+log_len, logs_file_name, logs_file_name_len);
-	path[cache_len+log_len+logs_file_name_len] = '\0';
+	memcpy(path + cache_len + log_len, logs_file_name, logs_file_name_len);
+	path[cache_len + log_len + logs_file_name_len] = '\0';
 
 	if (b) {
-		free(cache); 
+		free(cache);
 	}
 
 	return path;
 }
 
-void os_write(string data, length length, u32 fd) {
-	write(fd, data, length);
+void os_write(string data, length length, FILE* fd) {
+	write(fd->_fileno, data, length);
 }
 
 boolean os_mkdir(string directory) {
@@ -102,9 +102,9 @@ boolean os_mkdir(string directory) {
 	return TRUE;
 }
 
-/* 
- * "inspired" by 
- * https://gist.github.com/JonathonReinhart/8c0d90191c38af2dcadb102c4e202950 
+/*
+ * "inspired" by
+ * https://gist.github.com/JonathonReinhart/8c0d90191c38af2dcadb102c4e202950
  *
  * "inspired" as in copyed and converted into my formatting :3
  */
@@ -117,7 +117,7 @@ void os_recursive_mkdir(string path) {
 
 	memcpy(path_dup, path, path_len);
 
-	for (char* p = path_dup+1; *p; p++) {
+	for (char* p = path_dup + 1; *p; p++) {
 		if (*p == '/') {
 			*p = '\0';
 			if (os_mkdir(path_dup) == FALSE) {

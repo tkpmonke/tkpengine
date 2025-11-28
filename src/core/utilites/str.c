@@ -1,6 +1,7 @@
 #include "str.h"
 
-/* https://www.geeksforgeeks.org/c/how-to-convert-an-integer-to-a-string-in-c/ */
+/* https://www.geeksforgeeks.org/c/how-to-convert-an-integer-to-a-string-in-c/
+ */
 i32 u32_to_str(u32 in, string out) {
 	u32 i = 0;
 
@@ -49,22 +50,22 @@ i32 i32_to_str(i32 in, string out) {
 		out[j] = out[k];
 		out[k] = temp;
 	}
-	
+
 	return i;
 }
 
 /* https://www.geeksforgeeks.org/cpp/convert-floating-point-number-string/ */
 void f32_to_str(f32 in, string out) {
 	i32 post_dec = (int)in;
-	float pre_dec = in-(float)post_dec;
+	float pre_dec = in - (float)post_dec;
 	int i = i32_to_str(post_dec, out);
-	
+
 	out[i] = '.';
-	
+
 	/* pow(10, 4) is 10,000 */
 	pre_dec *= 10000;
 	if (pre_dec < 0) {
 		pre_dec = -pre_dec;
 	}
-	i32_to_str((i32)pre_dec, out+i+1);
+	i32_to_str((i32)pre_dec, out + i + 1);
 }
