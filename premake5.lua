@@ -39,7 +39,7 @@ project "tkpengine"
 		cdialect "gnu99"
 		kind "StaticLib"
 		buildoptions { "-sMEMORY64=1" }
-		linkoptions { "-sMEMORY64=1", "-mwasm64" }
+		linkoptions { "-sMEMORY64=1", "-mwasm64", "-sUSE_WEBGL2=1", "-sASYNCIFY" }
 
 
 project "test-editor"
@@ -65,7 +65,7 @@ project "test-editor"
 	filter "system:emscripten"
 		cdialect "gnu99"
 		buildoptions { "-sMEMORY64=1" }
-		linkoptions { "-sMEMORY64=1", "-mwasm64" }
+		linkoptions { "-sMEMORY64=1", "-mwasm64", "-sUSE_WEBGL2=1", "-sASYNCIFY" }
 		targetextension ".html"
 		
 		links { "tkpengine", "cglm", "glad", "rgfw" }

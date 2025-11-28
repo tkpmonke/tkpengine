@@ -18,6 +18,12 @@ typedef struct
 	boolean indexed: 1;
 } opengl_es2_draw_command_t;
 
+typedef struct {
+	vertex_attribute_t* attributes;
+	rendering_buffer_t* vertex_buffer;
+	length count;
+} opengl_es2_vao_t;
+
 static GLenum _buffer_usage_to_GLenum[] = {
 	0,						 /* data */
 	GL_ARRAY_BUFFER,		 /* vertex */
@@ -116,29 +122,21 @@ void opengl_es2_free_buffer(rendering_buffer_t* buffer) {
 vertex_attribute_object opengl_es2_create_vertex_attribute_object(vertex_attribute_t* attributes, length count,
 															  rendering_buffer_t* vertex_buffer,
 															  rendering_buffer_t* index_buffer) {
+	/* gles2 sucks and doesn't have vaos */
+	opengl_es2_vao_t* vao = TKP_MALLOC(sizeof(opengl_es2_vao_t));
 
-	u32 vao;
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
+	vao->attributes = TKP_MALLOC(sizeof(vertex_attribute_t)*count);
+	memcpy(vao->attributes, attributes, sizeof(vertex_attribute_t)*count);
+	vao->vertex_buffer = vertex_buffer;
+	vao->count = count;
 
-	glBindBuffer(_buffer_usage_to_GLenum[vertex_buffer->usage & 0b00001111], *(u32*)vertex_buffer->platform);
-
-	if (index_buffer != NULL) {
-		glBindBuffer(_buffer_usage_to_GLenum[index_buffer->usage & 0b00001111], *(u32*)index_buffer->platform);
-	}
-
-	for (length i = 0; i < count; ++i) {
-		glVertexAttribPointer(i, attributes[i].size, variant_type_to_GLenum(attributes[i].type), GL_FALSE,
-							  attributes[i].stride, (void*)(attributes->offset));
-		glEnableVertexAttribArray(i);
-	}
-
-	list_push(&_opengl_es2_objects, &vao);
-	return list_get(&_opengl_es2_objects, _opengl_es2_objects.size - 1);
+	return vao;
 }
 
 void opengl_es2_free_vertex_attribute_object(vertex_attribute_object vao) {
-	glDeleteVertexArrays(1, (u32*)vao);
+	opengl_es2_vao_t* v = vao;
+	TKP_FREE(v->attributes);
+	TKP_FREE(v);
 }
 
 rendering_shader_t opengl_es2_compile_shader(string contents, rendering_shader_type_t type) {
@@ -229,7 +227,13 @@ void opengl_es2_execute_command_buffer(rendering_command_buffer cmd, window_t* w
 		}
 
 		glUseProgram(*(u32*)draw_cmd->pipeline->platform);
-		glBindVertexArray(*(u32*)draw_cmd->vao);
+
+		opengl_es2_vao_t* vao = (opengl_es2_vao_t*)draw_cmd->vao;
+		for (length i = 0; i < vao->count; ++i) {
+			glVertexAttribPointer(i, vao->attributes[i].size, variant_type_to_GLenum(vao->attributes[i].type), GL_FALSE,
+								  vao->attributes[i].stride, (void*)(vao->attributes->offset));
+			glEnableVertexAttribArray(i);
+		}
 
 		if (draw_cmd->indexed) {
 			glDrawElements(_pipeline_polygon_mode_to_GLenum[draw_cmd->pipeline->polygon_mode], draw_cmd->draw_count,

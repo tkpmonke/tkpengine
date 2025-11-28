@@ -54,9 +54,26 @@ void* window_opengl_load_proc(void) {
 	return RGFW_getProcAddress_OpenGL;
 }
 
+#if defined (__EMSCRIPTEN__)
+static u64 _window_frame_counter = 0;
+void window_main_loop(void) {
+	_window_frame_counter += 1;
+}
+
+void window_wait_for_emscripten(void* arg) {
+	while (_window_frame_counter < 1) {}
+}
+#endif
+
 void window_opengl_create_context(window_t* window) {
 	RGFW_window_createContext_OpenGL(window->platform, RGFW_getGlobalHints_OpenGL());
 	RGFW_window_makeCurrentContext_OpenGL(window->platform);
+
+#if defined (__EMSCRIPTEN)
+	emscripten_set_main_loop(window_main_loop, 0, 1);
+	emscripten_async_call(window_wait_for_emscripten, NULL, 500);
+#endif
+	
 	RGFW_window_show(window->platform);
 }
 

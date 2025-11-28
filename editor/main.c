@@ -13,16 +13,16 @@
  * no i don't feel bad
  */
 #if defined (__EMSCRIPTEN__)
-static const string vertex_shader_source = "#version 330 core\n"
-										   "layout (location = 0) in vec3 a_pos;\n"
+static const string vertex_shader_source = "#version 100\n"
+										   "attribute vec3 a_pos;\n"
 										   "void main() {\n"
 										   "   gl_Position = vec4(a_pos.x, a_pos.y, a_pos.z, 1.0);\n"
 										   "}\0";
 
-static const string fragment_shader_source = "#version 330 core\n"
-											 "out vec4 o_color;\n"
+static const string fragment_shader_source = "#version 100\n"
+											 "precision mediump float;\n"
 											 "void main() {\n"
-											 "   o_color = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+											 "   gl_FragColor = vec4(1.0, 0.5, 0.2, 1.0);\n"
 											 "}\n\0";
 #else
 static const string vertex_shader_source = "#version 330 core\n"
@@ -86,7 +86,7 @@ int main(int argc, string* argv) {
 	rendering_command_buffer cmd = rendering_interface->create_command_buffer();
 
 	while (window_ping(&root_window)) {
-		rendering_interface->clear(0.0f, 1.0f, 0.0f, 1.0f);
+		rendering_interface->clear(0.0f, 0.0f, 0.0f, 1.0f);
 		rendering_interface->bind_pipeline(cmd, &pipeline);
 		rendering_interface->draw_indexed_buffer(cmd, vao, 6);
 		rendering_interface->execute_command_buffer(cmd, &root_window);
