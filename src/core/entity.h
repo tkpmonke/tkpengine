@@ -12,4 +12,3 @@ typedef struct entity_t {
 
 	list_t components;
 } entity_t;
-

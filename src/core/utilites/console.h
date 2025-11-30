@@ -4,11 +4,10 @@
 #include <stdarg.h>
 
 #include "../types.h"
-#include "arguments.h"
 
 #define TKP_DEFAULT_CONSOLE_BUFFER_ALLOCATION 128
 
-void console_init(arguments_t* args);
+void console_init(boolean print_header, boolean print_help);
 
 /* passing NULL will use a default log path */
 void console_init_log_file(string path);

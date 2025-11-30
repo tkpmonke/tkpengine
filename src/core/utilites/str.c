@@ -1,4 +1,7 @@
 #include "str.h"
+#include "../memory/memory.h"
+
+#include <string.h>
 
 /* https://www.geeksforgeeks.org/c/how-to-convert-an-integer-to-a-string-in-c/ */
 i32 u32_to_str(u32 in, string out) {
@@ -67,4 +70,16 @@ void f32_to_str(f32 in, string out) {
 		pre_dec = -pre_dec;
 	}
 	i32_to_str((i32)pre_dec, out+i+1);
+}
+
+string str_dup(string s) {
+	length len = strlen(s);
+	string out = TKP_MALLOC(len+1);
+	out[len] = '\0';
+	
+	for (length i = 0; i < len; ++i) {
+		out[i] = s[i];
+	}
+
+	return out;
 }

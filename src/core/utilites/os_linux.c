@@ -19,7 +19,7 @@ string os_get_home() {
 	string home = getenv("HOME");
 	
 	if (home == NULL) {
-		os_write((char*)home_is_not_set_error, home_is_not_set_error_len, stdout->_fileno);
+		os_write((char*)home_is_not_set_error, home_is_not_set_error_len, stderr);
 		return NULL;
 	}
 
@@ -42,7 +42,7 @@ string os_get_log_path() {
 		char* home = os_get_home();
 		length home_len = strlen(home);
 
-		cache = malloc(home_len+8);
+		cache = TKP_MALLOC(home_len+8);
 		memcpy(cache, home, home_len);
 		memcpy(cache+home_len, "/.cache", 7);
 		cache[home_len+7] = '\0';
@@ -52,7 +52,7 @@ string os_get_log_path() {
 	length log_len = strlen(logs_dir);
 	length logs_file_name_len = strlen(logs_file_name);
 
-	string path = (string)malloc(cache_len+log_len+logs_file_name_len+1);
+	string path = (string)TKP_MALLOC(cache_len+log_len+logs_file_name_len+1);
 	memcpy(path, cache, cache_len);
 	memcpy(path+cache_len, logs_dir, log_len);
 	path[cache_len+log_len] = '\0';
@@ -66,14 +66,14 @@ string os_get_log_path() {
 	path[cache_len+log_len+logs_file_name_len] = '\0';
 
 	if (b) {
-		free(cache); 
+		TKP_FREE(cache); 
 	}
 
 	return path;
 }
 
-void os_write(string data, length length, u32 fd) {
-	write(fd, data, length);
+void os_write(string data, length length, FILE* fd) {
+	write(fd->_fileno, data, length);
 }
 
 boolean os_mkdir(string directory) {

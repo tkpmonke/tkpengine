@@ -21,6 +21,7 @@
 
 static FILE* _log_file = NULL;
 static FILE* _console = NULL;
+static string _log_path = NULL;
 
 static const string _help_message =
 "-h/--help\t-\tprints this help message\n"
@@ -29,7 +30,7 @@ static const string _help_message =
 "--log-path\t-\tspecify custom log path (default is ~/.cache/tkpengine/logs/log.txt)\n"
 "--no-header\t-\tdon't print the starting header\n\n";
 
-void console_init(arguments_t* args) {
+void console_init(boolean print_header, boolean print_help) {
 #if defined(__linux__)
 	const string os = "linux";
 #elif defined(__unix__)
@@ -42,45 +43,40 @@ void console_init(arguments_t* args) {
 
 	_console = stdout;
 
-	if (args->print_header == TRUE) {
+	if (print_header == TRUE) {
 		console_write_va("TKPEngine %s-%s\nCompiled on %s at %s\n\n", TKP_GET_VERSION_STRING(), os, __DATE__, __TIME__);
 		console_write_va("Home Path > %s\n", os_get_home());
 
 		if (_log_file != NULL) {
-			if (args->log_path == NULL) {
-			char* log_path = os_get_log_path();
-			console_write_va("Log Path > %s\n\n", log_path);
-			TKP_FREE(log_path);
+			if (_log_path == NULL) {
+				char* log_path = os_get_log_path();
+				console_write_va("Log Path > %s\n\n", log_path);
+				TKP_FREE(log_path);
 			} else {
-				console_write_va("Log Path > %s\n\n", args->log_path);
+				console_write_va("Log Path > %s\n\n", _log_path);
 			}
 		} else {
 			console_write("Log Path > Disabled\n\n");
 		}
 	}
 
-	if (args->print_help_message == TRUE) {
+	if (print_help == TRUE) {
 		console_write(_help_message);
 		console_free();
-		TKP_FREE(args);
 		exit(0);
 	}
 }
 
 void console_init_log_file(string path) {
-	boolean b = FALSE;
 	if (path == NULL) {
-		path = os_get_log_path();
-		b = TRUE;
+		_log_path = os_get_log_path();
+	} else {
+		_log_path = str_dup(path);
 	}
 
-	_log_file = fopen(path, "w");
+	_log_file = fopen(_log_path, "w");
 	if (_log_file == NULL) {
-		console_write_error("Log file could not be found nor created\n");
-	}
-	
-	if (b) {
-		TKP_FREE(path);
+		console_write_error("Log file could not be found or created\n");
 	}
 }
 
@@ -90,41 +86,41 @@ void console_set_console_file(FILE* file) {
 
 void console_write(string message) {
 	if (_console != NULL) {
-		os_write(message, strlen(message), _console->_fileno);
+		os_write(message, strlen(message), _console);
 	} if (_log_file != NULL) {
-		os_write(message, strlen(message), _log_file->_fileno);
+		os_write(message, strlen(message), _log_file);
 	}
 }
 
 void console_write_len(string message, length len) {
 	if (_console != NULL) {
-		os_write(message, len, _console->_fileno);
+		os_write(message, len, _console);
 	} if (_log_file != NULL) {
-		os_write(message, len, _log_file->_fileno);
+		os_write(message, len, _log_file);
 	}
 }
 
 void console_write_warning(string warning) {
 	if (_console != NULL) {
-		os_write("\x1b[1;4;33mWarning:\x1b[0m ", 22, _console->_fileno);
-		os_write(warning, strlen(warning), _console->_fileno);
+		os_write("\x1b[1;4;33mWarning:\x1b[0m ", 22, _console);
+		os_write(warning, strlen(warning), _console);
 	} if (_log_file != NULL) {
-		os_write("Warning: ", 9, _log_file->_fileno);
-		os_write(warning, strlen(warning), _log_file->_fileno);
+		os_write("Warning: ", 9, _log_file);
+		os_write(warning, strlen(warning), _log_file);
 	}
 }
 
 void console_write_error(string error) {
 	length len = strlen(error);
 	if (_console != NULL) {
-		os_write("\x1b[1;4;31mError:\x1b[0m ", 20, _console->_fileno);
+		os_write("\x1b[1;4;31mError:\x1b[0m ", 20, _console);
 		if (len > 0) {
-			os_write(error, len, _console->_fileno);
+			os_write(error, len, _console);
 		}
 	} if (_log_file != NULL) {
-		os_write("Error: ", 7, _log_file->_fileno);
+		os_write("Error: ", 7, _log_file);
 		if (len > 0) {
-			os_write(error, len, _log_file->_fileno);
+			os_write(error, len, _log_file);
 		}
 	}
 }
@@ -185,5 +181,7 @@ void console_write_error_va(string error, ...) {
 void console_free(void) {
 	if (_log_file != NULL) {
 		fclose(_log_file);
+	} if (_log_path != NULL) {
+		TKP_FREE(_log_path);
 	}
 }

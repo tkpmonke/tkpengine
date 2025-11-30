@@ -42,12 +42,12 @@ void list_resize(list_t* list, length new_capacity) {
 
 void list_copy_to(list_t* list, void* data, length start, length count) {
 	if (count == 0) {
-		console_write_error("Cannot copy with length of 0\n");
+		console_write_error("List > Cannot copy with length of 0\n");
 		return;
 	}
 
 	if (start+count > list->capacity) {
-		console_write_error_va("Cannot execute list_copy_to, %d > %d\n", start+count, list->capacity);
+		console_write_error_va("List > Cannot execute list_copy_to, %d > %d\n", start+count, list->capacity);
 		return;
 	}
 
@@ -56,7 +56,7 @@ void list_copy_to(list_t* list, void* data, length start, length count) {
 
 void list_copy_from(list_t* list, void* data, length start, length count) {
 	if (count == 0) {
-		console_write_error("Cannot copy with length of 0\n");
+		console_write_error("List > Cannot copy with length of 0\n");
 		return;
 	}
 	

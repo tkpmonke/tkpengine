@@ -1,5 +1,5 @@
 #include "arguments.h"
-#include "../memory/memory.h"
+#include "core/memory/memory.h"
 
 #include <string.h>
 
