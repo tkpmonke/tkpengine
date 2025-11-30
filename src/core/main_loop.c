@@ -21,7 +21,6 @@ void main_loop_init(main_loop_t* loop, string title) {
 	loader_registry_init();
 	object_registry_init();
 	loop->render_interface = opengl_create_rendering_interface();
-	rendering_interface_set(loop->render_interface);
 	loop->render_interface->init(&loop->window);
 
 	_main_loop = loop;

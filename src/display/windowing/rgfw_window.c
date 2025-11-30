@@ -1,6 +1,6 @@
 #include "window.h"
 #include "core/utilites/console.h"
-#include "display/rendering/rendering_interface.h"
+#include "core/main_loop.h"
 
 #include <stddef.h>
 
@@ -57,7 +57,7 @@ boolean window_ping(window_t* window) {
 			return FALSE;
 		} else if (e.type == RGFW_windowResized) {
 			RGFW_window_getSize(window->platform, &window->rect.size[0], &window->rect.size[1]);
-			rendering_interface_get()->resize(window);
+			main_loop_get()->render_interface->resize(window);
 		} else if (e.type == RGFW_windowMoved) {
 			RGFW_window_getPosition(window->platform, &window->rect.position[0], &window->rect.position[1]);
 		}

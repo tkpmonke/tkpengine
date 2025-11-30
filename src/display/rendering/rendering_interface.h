@@ -55,6 +55,3 @@ typedef struct {
 
 	void (*free)(void);
 } rendering_interface_t;
-
-void rendering_interface_set(rendering_interface_t* interface);
-rendering_interface_t* rendering_interface_get(void);
