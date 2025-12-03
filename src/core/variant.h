@@ -32,8 +32,9 @@ typedef enum {
 	variant_type_enum,
 	/* reference to an object */
 	variant_type_object,
-	
-	variant_type_max
+
+	/* bitflag */
+	variant_type_array = 128,
 } variant_type_t;
 
 typedef struct {

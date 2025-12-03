@@ -4,10 +4,12 @@
 
 #include <stdio.h>
 
-string os_get_home();
+double os_get_time_since_startup(void);
+
+string os_get_home(void);
 
 /* requires result to be freed */
-string os_get_log_path();
+string os_get_log_path(void);
 
 void os_write(string data, length length, FILE* fd);
 

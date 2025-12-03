@@ -1,3 +1,4 @@
+
 #include "os.h"
 #include "console.h"
 #include "../memory/memory.h"
@@ -12,6 +13,21 @@
 #include <errno.h>
 #include <unistd.h>
 #include <sys/stat.h>
+#include <sys/time.h>
+
+static double _start_time = 0.0;
+double os_get_time_since_startup(void) {
+	struct timeval tv;
+	gettimeofday(&tv, NULL);
+
+	double current_time = tv.tv_sec + (double)tv.tv_usec / 1000000;
+
+	if (_start_time == 0.0) {
+		_start_time = current_time;
+	}
+
+	return current_time-_start_time;
+}
 
 string os_get_home() {
 	const string home_is_not_set_error = "$HOME is not set\n";

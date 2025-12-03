@@ -1,10 +1,12 @@
 #include "main_loop.h"
 
-#include "loaders/loader_registry.h"
 #include "core/object_registry.h"
+#include "core/memory/memory.h"
+#include "core/utilites/os.h"
+#include "core/memory/hashed_string.h"
 #include "display/windowing/window.h"
 #include "display/rendering/backends/opengl/opengl_rendering_interface.h"
-#include "core/memory/memory.h"
+#include "loaders/loader_registry.h"
 
 static main_loop_t* _main_loop = NULL;
 
@@ -23,6 +25,10 @@ void main_loop_init(main_loop_t* loop, string title) {
 	loop->render_interface = opengl_create_rendering_interface();
 	loop->render_interface->init(&loop->window);
 
+	memset(&loop->root, 0, sizeof(entity_t));
+	entity_init(&loop->root, "Root");
+	loop->root.base.type = object_registry_get_by_name(hashed_string_generate("entity"))->type;
+
 	_main_loop = loop;
 }
 
@@ -31,10 +37,23 @@ main_loop_t* main_loop_get(void) {
 }
 
 void main_loop_start(main_loop_t* loop) {
+	entity_start(&loop->root);
+
+	double prev_delta = 0.0;
 	while (window_ping(&loop->window)) {
+		double time = os_get_time_since_startup();
+		double delta = time-prev_delta;
+		prev_delta = time;
+
+		entity_update(&loop->root, delta);
+
 		loop->render_interface->clear(0.2f, 0.2f, 0.2f, 1.0f);
+		entity_render(&loop->root);
 		loop->render_interface->swap_buffers(&loop->window);
+		entity_post_render(&loop->root);
 	}
+
+	entity_shutdown(&loop->root);
 
 	loop->render_interface->free();
 	TKP_FREE(loop->render_interface);

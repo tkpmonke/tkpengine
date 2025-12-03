@@ -101,21 +101,23 @@ void register_core_objects() {
 	/* entity */
 	{
 		static object_variable_t* variables = NULL;
-
-		/* 
-		 * this does not include components because i'd prefer
-		 * for there not to be direct access to the components
-		 * if it's not needed
-		 */
 		object_variable_t vars[] = {
 			{
 				.name = hashed_string_generate("name"),
 				.type = variant_type_string,
 				.offset = offsetof(entity_t, name)
 			}, {
-				.name = hashed_string_generate("id"),
-				.type = variant_type_u64,
-				.offset = offsetof(entity_t, id)
+				.name = hashed_string_generate("parent"),
+				.type = variant_type_object,
+				.offset = offsetof(entity_t, parent)
+			}, {
+				.name = hashed_string_generate("children"),
+				.type = variant_type_array | variant_type_object,
+				.offset = offsetof(entity_t, children)
+			}, {
+				.name = hashed_string_generate("components"),
+				.type = variant_type_array | variant_type_object,
+				.offset = offsetof(entity_t, components)
 			},
 			{0, 0, 0}
 		};

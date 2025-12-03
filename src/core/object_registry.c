@@ -2,6 +2,8 @@
 #include "modules.h"
 #include "core_objects.h"
 
+#include <stdio.h>
+
 static object_registry_t _object_registry;
 
 void object_registry_init() {

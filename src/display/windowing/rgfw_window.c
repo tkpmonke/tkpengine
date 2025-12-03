@@ -28,13 +28,6 @@ void window_init(window_t* window, string name) {
 	);
 }
 
-void window_set_icon(window_t* window, u8* data, u32 width, u32 height) {
-	(void)window;
-	(void)data;
-	(void)width;
-	(void)height;
-}
-
 void window_opengl_create_context(window_t* window) {
 	RGFW_glHints* hints = RGFW_getGlobalHints_OpenGL();
 	hints->major = 3;
@@ -57,7 +50,10 @@ boolean window_ping(window_t* window) {
 			return FALSE;
 		} else if (e.type == RGFW_windowResized) {
 			RGFW_window_getSize(window->platform, &window->rect.size[0], &window->rect.size[1]);
-			main_loop_get()->render_interface->resize(window);
+
+			if (main_loop_get()->render_interface) {
+				main_loop_get()->render_interface->resize(window);
+			}
 		} else if (e.type == RGFW_windowMoved) {
 			RGFW_window_getPosition(window->platform, &window->rect.position[0], &window->rect.position[1]);
 		}
@@ -72,6 +68,17 @@ void window_opengl_swap_buffers(window_t* window) {
 
 void window_free(window_t* window) {
 	RGFW_window_close(window->platform);
+}
+
+void window_set_icon(window_t* window, u8* data, u32 width, u32 height) {
+	(void)window;
+	(void)data;
+	(void)width;
+	(void)height;
+}
+
+void window_set_size(window_t* window, u32 width, u32 height) {
+	RGFW_window_resize(window->platform, width, height);
 }
 
 #endif /* platform check */

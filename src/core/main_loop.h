@@ -7,8 +7,9 @@
 
 typedef struct {
 	window_t window;
+	entity_t root;
+
 	rendering_interface_t* render_interface;
-	entity_t* root;
 } main_loop_t;
 
 TKP_EXPORT void main_loop_init(main_loop_t* loop, string title);

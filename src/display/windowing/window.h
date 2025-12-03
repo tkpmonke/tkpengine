@@ -18,7 +18,6 @@ typedef struct {
 } window_t;
 
 void window_init(window_t* window, string name);
-void window_set_icon(window_t* window, u8* data, u32 width, u32 height);
 
 void window_opengl_create_context(window_t* window);
 
@@ -27,3 +26,6 @@ boolean window_ping(window_t* window);
 void window_opengl_swap_buffers(window_t* window);
 
 void window_free(window_t* window);
+
+void window_set_icon(window_t* window, u8* data, u32 width, u32 height);
+void window_set_size(window_t* window, u32 width, u32 height);
